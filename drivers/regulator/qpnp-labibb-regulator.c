@@ -1,4 +1,5 @@
 /* Copyright (c) 2014-2017, 2019, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2018 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -98,6 +99,12 @@
 
 /* REG_LAB_ENABLE_CTL */
 #define LAB_ENABLE_CTL_EN		BIT(7)
+
+/* REG_LAB_ENABLE_SOFT_START */
+#define LAB_ENABLE_SOFT_START		BIT(5)
+
+/* REG_LAB_SEL_PS_TABLE_1 */
+#define LAB_SEL_PS_TABLE_1		BIT(2)
 
 /* REG_LAB_PD_CTL */
 #define LAB_PD_CTL_STRONG_PULL		BIT(0)
@@ -1349,6 +1356,9 @@ static int qpnp_lab_ps_ctl_v1(struct qpnp_labibb *labibb,
 		}
 
 		val |= LAB_PS_CTL_EN;
+
+		val |= LAB_ENABLE_SOFT_START | LAB_SEL_PS_TABLE_1;
+
 	} else {
 		val = 0;
 	}
@@ -1381,6 +1391,8 @@ static int qpnp_lab_ps_ctl_v2(struct qpnp_labibb *labibb,
 		}
 
 		val |= LAB_PS_CTL_EN;
+
+                val |= LAB_ENABLE_SOFT_START | LAB_SEL_PS_TABLE_1;
 		mask |= LAB_PS_THRESH_MASK;
 	} else {
 		val = 0;
