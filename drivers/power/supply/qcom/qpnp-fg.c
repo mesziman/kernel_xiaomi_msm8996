@@ -2286,7 +2286,8 @@ static int get_prop_capacity(struct fg_chip *chip)
 	}
 
 //	return DIV_ROUND_CLOSEST((msoc - 1) * (FULL_CAPACITY - 2),
-	return DIV_ROUND_CLOSEST((msoc - 1) * (FULL_CAPACITY - 1),
+//	return DIV_ROUND_CLOSEST((msoc - 1) * (FULL_CAPACITY - 1),
+	return DIV_ROUND_CLOSEST((msoc - 1) * (FULL_CAPACITY - 2),
 			FULL_SOC_RAW - 2) + 1;
 }
 
@@ -3522,6 +3523,49 @@ static int fg_get_current_cc(struct fg_chip *chip)
 	if (rc < 0) {
 		pr_err("Failed to get cc_soc, rc=%d\n", rc);
 		return rc;
+	}
+
+	current_capacity = cc_soc * chip->learning_data.learned_cc_uah;
+	current_capacity = div64_u64(current_capacity, FULL_PERCENT_28BIT);
+	return current_capacity;
+}
+
+#define BATT_MISSING_STS BIT(6)
+static bool is_battery_missing(struct fg_chip *chip)
+{
+	int rc;
+	u8 fg_batt_sts;
+
+	rc = fg_read(chip, &fg_batt_sts,
+				 INT_RT_STS(chip->batt_base), 1);
+	if (rc) {
+		pr_err("spmi read failed: addr=%03X, rc=%d\n",
+				INT_RT_STS(chip->batt_base), rc);
+		return false;
+	}
+
+	return (fg_batt_sts & BATT_MISSING_STS) ? true : false;
+}
+
+static int fg_cap_learning_process_full_data(struct fg_chip *chip)
+{
+	int cc_pc_val, rc = -EINVAL;
+	unsigned int cc_soc_delta_pc;
+	int64_t delta_cc_uah;
+	uint64_t temp;
+	bool batt_missing = is_battery_missing(chip);
+
+	if (batt_missing) {
+		pr_err("Battery is missing!\n");
+		goto fail;
+	}
+
+	if (!chip->learning_data.active)
+		goto fail;
+
+	if (!fg_is_temperature_ok_for_learning(chip)) {
+		fg_cap_learning_stop(chip);
+		goto fail;
 	}
 
 	current_capacity = cc_soc * chip->learning_data.learned_cc_uah;
@@ -5040,6 +5084,7 @@ static void cc_soc_store_work(struct work_struct *work)
 }
 
 #define HARD_JEITA_ALARM_CHECK_NS	10000000000ULL
+//#define HARD_JEITA_ALARM_CHECK_NS	10000000000
 static enum alarmtimer_restart fg_hard_jeita_alarm_cb(struct alarm *alarm,
 						ktime_t now)
 {
