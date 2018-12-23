@@ -1187,7 +1187,7 @@ done:
 	return rc;
 }
 
-static int q6afe_set_params(u16 port_id, int index,
+int q6afe_set_params(u16 port_id, int index,
 			    struct mem_mapping_hdr *mem_hdr,
 			    u8 *packed_param_data, u32 packed_data_size)
 {
@@ -1221,7 +1221,7 @@ static int q6afe_set_params(u16 port_id, int index,
 					   packed_param_data, packed_data_size);
 }
 
-static int q6afe_pack_and_set_param_in_band(u16 port_id, int index,
+int q6afe_pack_and_set_param_in_band(u16 port_id, int index,
 					    struct param_hdr_v3 param_hdr,
 					    u8 *param_data)
 {
