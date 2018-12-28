@@ -194,39 +194,6 @@ static int is_adsp_raise_event(uint32_t cmd)
 	return -EINVAL;
 }
 
-int q6asm_get_svc_version(uint32_t service_id)
-{
-	int ret = 0;
-	static int asm_cached_version;
-	size_t ver_size;
-	struct avcs_fwk_ver_info *ver_info = NULL;
-
-	if (service_id == AVCS_SERVICE_ID_ALL) {
-		pr_err("%s: Invalid service id: %d", __func__,
-					AVCS_SERVICE_ID_ALL);
-		return -EINVAL;
-	}
-
-	if (asm_cached_version != 0)
-		return asm_cached_version;
-
-	ver_size = sizeof(struct avcs_get_fwk_version) +
-			sizeof(struct avs_svc_api_info);
-	ver_info = kzalloc(ver_size, GFP_KERNEL);
-	if (ver_info == NULL)
-		return -ENOMEM;
-
-	ret = q6core_get_service_version(service_id, ver_info, ver_size);
-	if (ret < 0)
-		goto done;
-
-	ret = ver_info->services[0].api_version;
-	asm_cached_version = ret;
-done:
-	kfree(ver_info);
-	return ret;
-}
-
 static inline void q6asm_set_flag_in_token(union asm_token_struct *asm_token,
 					   int flag, int flag_offset)
 {
@@ -260,9 +227,6 @@ static inline uint32_t q6asm_get_pcm_format_id(uint32_t media_format_block_ver)
 	uint32_t pcm_format_id;
 
 	switch (media_format_block_ver) {
-	case PCM_MEDIA_FORMAT_V5:
-		pcm_format_id = ASM_MEDIA_FMT_MULTI_CHANNEL_PCM_V5;
-		break;
 	case PCM_MEDIA_FORMAT_V4:
 		pcm_format_id = ASM_MEDIA_FMT_MULTI_CHANNEL_PCM_V4;
 		break;
@@ -2881,23 +2845,6 @@ int q6asm_open_read_v4(struct audio_client *ac, uint32_t format,
 }
 EXPORT_SYMBOL(q6asm_open_read_v4);
 
-/*
- * asm_open_read_v5 - Opens audio capture session
- *
- * @ac: Client session handle
- * @format: encoder format
- * @bits_per_sample: bit width of capture session
- * @ts_mode: timestamp mode
- */
-int q6asm_open_read_v5(struct audio_client *ac, uint32_t format,
-			uint16_t bits_per_sample, bool ts_mode)
-{
-	return __q6asm_open_read(ac, format, bits_per_sample,
-				 PCM_MEDIA_FORMAT_V5 /*media fmt block ver*/,
-				 ts_mode);
-}
-EXPORT_SYMBOL(q6asm_open_read_v5);
-
 static int q6asm_open_read_version_adaptor(struct audio_client *ac,
 			uint32_t format, uint16_t bits_per_sample, bool ts_mode)
 {
@@ -3253,22 +3200,6 @@ int q6asm_open_write_v4(struct audio_client *ac, uint32_t format,
 #endif
 }
 EXPORT_SYMBOL(q6asm_open_write_v4);
-
-/*
- * q6asm_open_write_v5 - Opens audio playback session
- *
- * @ac: Client session handle
- * @format: decoder format
- * @bits_per_sample: bit width of playback session
- */
-int q6asm_open_write_v5(struct audio_client *ac, uint32_t format,
-			uint16_t bits_per_sample)
-{
-	return __q6asm_open_write(ac, format, bits_per_sample,
-				  ac->stream_id, false /*gapless*/,
-				  PCM_MEDIA_FORMAT_V5 /*pcm_format_block_ver*/);
-}
-EXPORT_SYMBOL(q6asm_open_write_v5);
 
 int q6asm_stream_open_write_v2(struct audio_client *ac, uint32_t format,
 			       uint16_t bits_per_sample, int32_t stream_id,
@@ -4395,7 +4326,7 @@ int q6asm_enc_cfg_blk_pcm_v3(struct audio_client *ac,
  * @sample_word_size: Size in bits of the word that holds a sample of a channel
  * @endianness: endianness of the pcm data
  * @mode: Mode to provide additional info about the pcm input data
- */
+ *//*
 static int q6asm_enc_cfg_blk_pcm_v5(struct audio_client *ac,
 			     uint32_t rate, uint32_t channels,
 			     uint16_t bits_per_sample, bool use_default_chmap,
@@ -4489,7 +4420,7 @@ fail_cmd:
 	return rc;
 }
 EXPORT_SYMBOL(q6asm_enc_cfg_blk_pcm_v5);
-
+*/
 /*
  * q6asm_enc_cfg_blk_pcm_v4 - sends encoder configuration parameters
  *
@@ -4791,18 +4722,6 @@ fail_cmd:
 	return rc;
 }
 
-static int __q6asm_enc_cfg_blk_pcm_v5(struct audio_client *ac,
-				      uint32_t rate, uint32_t channels,
-				      uint16_t bits_per_sample,
-				      uint16_t sample_word_size,
-				      uint16_t endianness,
-				      uint16_t mode)
-{
-	return q6asm_enc_cfg_blk_pcm_v5(ac, rate, channels,
-					bits_per_sample, true, false, NULL,
-					sample_word_size, endianness, mode);
-}
-
 #ifndef CONFIG_ARCH_MSM8996
 static int __q6asm_enc_cfg_blk_pcm_v4(struct audio_client *ac,
 				      uint32_t rate, uint32_t channels,
@@ -4895,31 +4814,6 @@ int q6asm_enc_cfg_blk_pcm_format_support_v4(struct audio_client *ac,
 #endif
 }
 EXPORT_SYMBOL(q6asm_enc_cfg_blk_pcm_format_support_v4);
-
-/*
- * q6asm_enc_cfg_blk_pcm_format_support_v5 - sends encoder configuration
- *                                           parameters
- *
- * @ac: Client session handle
- * @rate: sample rate
- * @channels: number of channels
- * @bits_per_sample: bit width of encoder session
- * @sample_word_size: Size in bits of the word that holds a sample of a channel
- * @endianness: endianness of the pcm data
- * @mode: Mode to provide additional info about the pcm input data
- */
-int q6asm_enc_cfg_blk_pcm_format_support_v5(struct audio_client *ac,
-					    uint32_t rate, uint32_t channels,
-					    uint16_t bits_per_sample,
-					    uint16_t sample_word_size,
-					    uint16_t endianness,
-					    uint16_t mode)
-{
-	 return __q6asm_enc_cfg_blk_pcm_v5(ac, rate, channels,
-					   bits_per_sample, sample_word_size,
-					   endianness, mode);
-}
-EXPORT_SYMBOL(q6asm_enc_cfg_blk_pcm_format_support_v5);
 
 int q6asm_enc_cfg_blk_pcm_native(struct audio_client *ac,
 			uint32_t rate, uint32_t channels)
@@ -5050,67 +4944,6 @@ static int q6asm_map_channels(u8 *channel_mapping, uint32_t channels,
 		lchannel_mapping[5] = PCM_CHANNEL_RB;
 		lchannel_mapping[6] = PCM_CHANNEL_LS;
 		lchannel_mapping[7] = PCM_CHANNEL_RS;
-	} else if (channels == 10) {
-		lchannel_mapping[0] = PCM_CHANNEL_FL;
-		lchannel_mapping[1] = PCM_CHANNEL_FR;
-		lchannel_mapping[2] = PCM_CHANNEL_LFE;
-		lchannel_mapping[3] = PCM_CHANNEL_FC;
-		lchannel_mapping[4] = PCM_CHANNEL_LS;
-		lchannel_mapping[5] = PCM_CHANNEL_RS;
-		lchannel_mapping[6] = PCM_CHANNEL_LB;
-		lchannel_mapping[7] = PCM_CHANNEL_RB;
-		lchannel_mapping[8] = PCM_CHANNEL_CS;
-		lchannel_mapping[9] = PCM_CHANNELS;
-	} else if (channels == 16) {
-		lchannel_mapping[0] = PCM_CHANNEL_FL;
-		lchannel_mapping[1] = PCM_CHANNEL_FR;
-		lchannel_mapping[2] = PCM_CHANNEL_LFE;
-		lchannel_mapping[3] = PCM_CHANNEL_FC;
-		lchannel_mapping[4] = PCM_CHANNEL_LS;
-		lchannel_mapping[5] = PCM_CHANNEL_RS;
-		lchannel_mapping[6] = PCM_CHANNEL_LB;
-		lchannel_mapping[7] = PCM_CHANNEL_RB;
-		lchannel_mapping[8] = PCM_CHANNEL_CS;
-		lchannel_mapping[9] = PCM_CHANNELS;
-		lchannel_mapping[10] = PCM_CHANNEL_CVH;
-		lchannel_mapping[11] = PCM_CHANNEL_MS;
-		lchannel_mapping[12] = PCM_CHANNEL_FLC;
-		lchannel_mapping[13] = PCM_CHANNEL_FRC;
-		lchannel_mapping[14] = PCM_CHANNEL_RLC;
-		lchannel_mapping[15] = PCM_CHANNEL_RRC;
-	} else if (channels == 32) {
-		lchannel_mapping[0] = PCM_CHANNEL_FL;
-		lchannel_mapping[1] = PCM_CHANNEL_FR;
-		lchannel_mapping[2] = PCM_CHANNEL_LFE;
-		lchannel_mapping[3] = PCM_CHANNEL_FC;
-		lchannel_mapping[4] = PCM_CHANNEL_LS;
-		lchannel_mapping[5] = PCM_CHANNEL_RS;
-		lchannel_mapping[6] = PCM_CHANNEL_LB;
-		lchannel_mapping[7] = PCM_CHANNEL_RB;
-		lchannel_mapping[8] = PCM_CHANNEL_CS;
-		lchannel_mapping[9] = PCM_CHANNELS;
-		lchannel_mapping[10] = PCM_CHANNEL_CVH;
-		lchannel_mapping[11] = PCM_CHANNEL_MS;
-		lchannel_mapping[12] = PCM_CHANNEL_FLC;
-		lchannel_mapping[13] = PCM_CHANNEL_FRC;
-		lchannel_mapping[14] = PCM_CHANNEL_RLC;
-		lchannel_mapping[15] = PCM_CHANNEL_RRC;
-		lchannel_mapping[16] = PCM_CHANNEL_LFE2;
-		lchannel_mapping[17] = PCM_CHANNEL_SL;
-		lchannel_mapping[18] = PCM_CHANNEL_SR;
-		lchannel_mapping[19] = PCM_CHANNEL_TFL;
-		lchannel_mapping[20] = PCM_CHANNEL_TFR;
-		lchannel_mapping[21] = PCM_CHANNEL_TC;
-		lchannel_mapping[22] = PCM_CHANNEL_TBL;
-		lchannel_mapping[23] = PCM_CHANNEL_TBR;
-		lchannel_mapping[24] = PCM_CHANNEL_TSL;
-		lchannel_mapping[25] = PCM_CHANNEL_TSR;
-		lchannel_mapping[26] = PCM_CHANNEL_TBC;
-		lchannel_mapping[27] = PCM_CHANNEL_BFC;
-		lchannel_mapping[28] = PCM_CHANNEL_BFL;
-		lchannel_mapping[29] = PCM_CHANNEL_BFR;
-		lchannel_mapping[30] = PCM_CHANNEL_LW;
-		lchannel_mapping[31] = PCM_CHANNEL_RW;
 	} else {
 		pr_err("%s: ERROR.unsupported num_ch = %u\n",
 		 __func__, channels);
@@ -6072,6 +5905,7 @@ fail_cmd:
 	return rc;
 }
 
+<<<<<<< HEAD
 static int __q6asm_media_format_block_multi_ch_pcm_v5(struct audio_client *ac,
 						      uint32_t rate,
 						      uint32_t channels,
@@ -6151,6 +5985,8 @@ fail_cmd:
 	return rc;
 }
 
+=======
+>>>>>>> Revert "ASoC: msm: Upgrade ASM Driver to support 32 Channels"
 int q6asm_media_format_block_multi_ch_pcm(struct audio_client *ac,
 		uint32_t rate, uint32_t channels,
 		bool use_default_chmap, char *channel_map)
@@ -6229,40 +6065,6 @@ int q6asm_media_format_block_multi_ch_pcm_v4(struct audio_client *ac,
 							  mode);
 }
 EXPORT_SYMBOL(q6asm_media_format_block_multi_ch_pcm_v4);
-
-/*
- * q6asm_media_format_block_multi_ch_pcm_v5 - sends pcm decoder configuration
- *                                            parameters
- *
- * @ac: Client session handle
- * @rate: sample rate
- * @channels: number of channels
- * @bits_per_sample: bit width of encoder session
- * @use_default_chmap: true if default channel map  to be used
- * @channel_map: input channel map
- * @sample_word_size: Size in bits of the word that holds a sample of a channel
- * @endianness: endianness of the pcm data
- * @mode: Mode to provide additional info about the pcm input data
- */
-int q6asm_media_format_block_multi_ch_pcm_v5(struct audio_client *ac,
-					     uint32_t rate, uint32_t channels,
-					     bool use_default_chmap,
-					     char *channel_map,
-					     uint16_t bits_per_sample,
-					     uint16_t sample_word_size,
-					     uint16_t endianness,
-					     uint16_t mode)
-{
-	return __q6asm_media_format_block_multi_ch_pcm_v5(ac, rate, channels,
-							  use_default_chmap,
-							  channel_map,
-							  bits_per_sample,
-							  sample_word_size,
-							  endianness,
-							  mode);
-}
-EXPORT_SYMBOL(q6asm_media_format_block_multi_ch_pcm_v5);
-
 
 /*
  * q6asm_media_format_block_gen_compr - set up generic compress format params
