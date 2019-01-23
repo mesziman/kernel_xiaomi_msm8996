@@ -910,20 +910,6 @@ set_stereo_to_custom_stereo_return:
 int adm_dolby_dap_send_params(int port_id, int copp_idx, char *params,
 			      uint32_t params_length)
 {
-	/* Use as wrapper for adm_set_pp_params until no longer used */
-	return adm_set_pp_params(port_id, copp_idx, NULL, params,
-				 params_length);
-}
-EXPORT_SYMBOL(adm_dolby_dap_send_params);
-
-/*
- * With pre-packed data, only the opcode differes from V5 and V6.
- * Use q6common_pack_pp_params to pack the data correctly.
- */
-int adm_set_pp_params(int port_id, int copp_idx,
-		      struct mem_mapping_hdr *mem_hdr, u8 *param_data,
-		      u32 param_size)
-{
 	struct adm_cmd_set_pp_params_v5	*adm_params = NULL;
 	int sz, rc = 0;
 	int port_idx;
@@ -1075,32 +1061,6 @@ int adm_get_params_v2(int port_id, int copp_idx, uint32_t module_id,
 		      uint32_t param_id, uint32_t params_length, char *params,
 		      uint32_t client_id)
 {
-	struct param_hdr_v3 param_hdr = {0};
-
-	param_hdr.module_id = module_id;
-	param_hdr.instance_id = INSTANCE_ID_0;
-	param_hdr.param_id = param_id;
-	param_hdr.param_size = params_length;
-
-	return adm_get_pp_params(port_id, copp_idx, client_id, NULL, &param_hdr,
-				 params);
-}
-
-int adm_get_params(int port_id, int copp_idx, uint32_t module_id,
-		   uint32_t param_id, uint32_t params_length, char *params)
-{
-	return adm_get_params_v2(port_id, copp_idx, module_id, param_id,
-				 params_length, params, 0);
-}
-
-/*
- * Only one parameter can be requested at a time. Therefore, packing and sending
- * the request can be handled locally.
- */
-int adm_get_pp_params(int port_id, int copp_idx, uint32_t client_id,
-		      struct mem_mapping_hdr *mem_hdr,
-		      struct param_hdr_v3 *param_hdr, u8 *returned_param_data)
-{
 	struct adm_cmd_get_pp_params_v5 *adm_params = NULL;
 	int rc = 0, i = 0;
 	int port_idx, idx;
@@ -1222,15 +1182,7 @@ int adm_get_params(int port_id, int copp_idx, uint32_t module_id,
 int adm_get_pp_topo_module_list(int port_id, int copp_idx, int32_t param_length,
 				char *params)
 {
-	return adm_get_pp_topo_module_list_v2(port_id, copp_idx, param_length,
-					      (int32_t *) params);
-}
-EXPORT_SYMBOL(adm_get_pp_topo_module_list);
 
-int adm_get_pp_topo_module_list_v2(int port_id, int copp_idx,
-				   int32_t param_length,
-				   int32_t *returned_params)
-{
 	struct adm_cmd_get_pp_topo_module_list_t *adm_pp_module_list = NULL;
 	int sz, rc = 0, i = 0;
 	int port_idx, idx;
