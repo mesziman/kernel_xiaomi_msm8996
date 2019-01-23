@@ -8885,75 +8885,22 @@ fail_cmd:
 	return -EINVAL;
 }
 
+
 int q6asm_send_audio_effects_params(struct audio_client *ac, char *params,
 				    uint32_t params_length)
 {
-	char *asm_params = NULL;
-	struct apr_hdr hdr;
-	struct asm_stream_cmd_set_pp_params_v2 payload_params;
-	int sz, rc;
+	int rc;
 
 	pr_debug("%s:\n", __func__);
-	if (!ac) {
-		pr_err("%s: APR handle NULL\n", __func__);
-		return -EINVAL;
-	}
-	if (ac->apr == NULL) {
-		pr_err("%s: AC APR handle NULL\n", __func__);
-		return -EINVAL;
-	}
-	if (params == NULL) {
-		pr_err("%s: params NULL\n", __func__);
-		return -EINVAL;
-	}
-	sz = sizeof(struct apr_hdr) +
-		sizeof(struct asm_stream_cmd_set_pp_params_v2) +
-		params_length;
-	asm_params = kzalloc(sz, GFP_KERNEL);
-	if (!asm_params) {
-		pr_err("%s, asm params memory alloc failed", __func__);
-		return -ENOMEM;
-	}
-	q6asm_add_hdr_async(ac, &hdr, (sizeof(struct apr_hdr) +
-				sizeof(struct asm_stream_cmd_set_pp_params_v2) +
-				params_length), TRUE);
-	atomic_set(&ac->cmd_state_pp, -1);
-	hdr.opcode = ASM_STREAM_CMD_SET_PP_PARAMS_V2;
-	payload_params.data_payload_addr_lsw = 0;
-	payload_params.data_payload_addr_msw = 0;
-	payload_params.mem_map_handle = 0;
-	payload_params.data_payload_size = params_length;
-	memcpy(((u8 *)asm_params), &hdr, sizeof(struct apr_hdr));
-	memcpy(((u8 *)asm_params + sizeof(struct apr_hdr)), &payload_params,
-			sizeof(struct asm_stream_cmd_set_pp_params_v2));
-	memcpy(((u8 *)asm_params + sizeof(struct apr_hdr) +
-				sizeof(struct asm_stream_cmd_set_pp_params_v2)),
-			params, params_length);
-	rc = apr_send_pkt(ac->apr, (uint32_t *) asm_params);
-	if (rc < 0) {
-		pr_err("%s: audio effects set-params send failed\n", __func__);
-		rc = -EINVAL;
-		goto fail_send_param;
-	}
-	rc = wait_event_timeout(ac->cmd_wait,
-				(atomic_read(&ac->cmd_state_pp) >= 0), 1*HZ);
-	if (!rc) {
-		pr_err("%s: timeout, audio effects set-params\n", __func__);
-		rc = -ETIMEDOUT;
-		goto fail_send_param;
-	}
-	if (atomic_read(&ac->cmd_state_pp) > 0) {
-		pr_err("%s: DSP returned error[%s] set-params\n",
-				__func__, adsp_err_get_err_str(
-				atomic_read(&ac->cmd_state_pp)));
-		rc = adsp_err_get_lnx_err_code(
-				atomic_read(&ac->cmd_state_pp));
-		goto fail_send_param;
-	}
 
-	rc = 0;
-fail_send_param:
-	kfree(asm_params);
+	/*
+	 * Leave function as wrapper for use by effects. Params must be properly
+	 * packed. Use q6common_pack_pp_param to pack params correctly.
+	 */
+	rc = q6asm_set_pp_params(ac, NULL, params, params_length);
+	if (rc)
+		pr_err("%s: audio effects set-params send failed\n", __func__);
+
 	return rc;
 }
 
