@@ -31,8 +31,8 @@ export USE_CCACHE=1
 export CCACHE_DIR=$CCACHEDIR/.ccache
 
 make clean && make mrproper
-make capricorn_defconfig
-make -j$( nproc --all )
+make -C $KERNEL_DIR capricorn_defconfig
+make -C $KERNEL_DIR -j$( nproc --all )
 
 {
 cp $KERNEL_DIR/arch/arm64/boot/Image.gz-dtb $ANYKERNEL_DIR/capricorn
