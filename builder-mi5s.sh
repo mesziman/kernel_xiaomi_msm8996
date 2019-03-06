@@ -30,12 +30,12 @@ export LD_LIBRARY_PATH=$TOOLCHAINDIR/lib/
 export USE_CCACHE=1
 export CCACHE_DIR=$CCACHEDIR/.ccache
 
-make clean && make mrproper
-make -C $KERNEL_DIR capricorn_defconfig
-make -C $KERNEL_DIR -j$( nproc --all )
+make O=out clean && make mrproper
+make -C $KERNEL_DIR O=out capricorn_defconfig
+make -C $KERNEL_DIR -j$( nproc --all ) O=out
 
 {
-cp $KERNEL_DIR/arch/arm64/boot/Image.gz-dtb $ANYKERNEL_DIR/capricorn
+cp $KERNEL_DIR/out/arch/arm64/boot/Image.gz-dtb $ANYKERNEL_DIR/capricorn
 } || {
 if [ $? != 0 ]; then
   echo "FAILED BUILD"
