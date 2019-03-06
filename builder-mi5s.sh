@@ -39,6 +39,7 @@ cp $KERNEL_DIR/arch/arm64/boot/Image.gz-dtb $ANYKERNEL_DIR/capricorn
 } || {
 if [ $? != 0 ]; then
   echo "FAILED BUILD"
+  exit
 fi
 }
 
