@@ -9,7 +9,7 @@ DATE=$(date +"%d%m%Y")
 KERNEL_NAME="4.4-test"
 DEVICE="-capricorn-"
 VER="-0.1"
-TYPE="HMP"
+TYPE="-HMP"
 FINAL_ZIP="$KERNEL_NAME""$DEVICE""$DATE""$TYPE""$VER".zip
 
 rm $ANYKERNEL_DIR/capricorn/Image.gz-dtb
@@ -24,13 +24,13 @@ export KBUILD_BUILD_HOST="github"
 #export CXX=/pipeline/build/root/toolchain/dtc/bin/clang++
 #export CC=clang
 #export CLANG_TRIPLE=aarch64-linux-gnu-
-export CROSS_COMPILE=aarch64-linux-android-
-export CROSS_COMPILE32=arm-linux-androideabi-
-export LD_LIBRARY_PATH=$TOOLCHAINDIR/lib/
+export CROSS_COMPILE=/pipeline/build/root/toolchain/aarch64-linux-android-4.9/bin/aarch64-linux-android-
+#export CROSS_COMPILE32=arm-linux-androideabi-
+#export LD_LIBRARY_PATH=$TOOLCHAINDIR/lib/
 export USE_CCACHE=1
 export CCACHE_DIR=$CCACHEDIR/.ccache
 
-make O=out clean && make mrproper
+make clean && make mrproper
 make -C $KERNEL_DIR O=out capricorn_defconfig
 make -C $KERNEL_DIR -j$( nproc --all ) O=out
 
