@@ -45,4 +45,6 @@ fi
 
 cd $ANYKERNEL_DIR/capricorn
 zip -r9 $FINAL_ZIP * -x *.zip $FINAL_ZIP
+cp $FINAL_ZIP ${WERCKER_REPORT_ARTIFACTS_DIR}/
 mv $FINAL_ZIP /pipeline/output/$FINAL_ZIP
+
