@@ -6,10 +6,10 @@ CCACHEDIR=../CCACHE/capricorn
 TOOLCHAINDIR=/pipeline/build/root/toolchain/aarch64-linux-android-4.9
 TOOLCHAIN32=/pipeline/build/root/toolchain/arm-linux-androideabi-4.9
 DATE=$(date +"%d%m%Y")
-KERNEL_NAME="Syberia"
+KERNEL_NAME="4.4-test"
 DEVICE="-capricorn-"
 VER="-0.1"
-TYPE="PIE-EAS"
+TYPE="HMP"
 FINAL_ZIP="$KERNEL_NAME""$DEVICE""$DATE""$TYPE""$VER".zip
 
 rm $ANYKERNEL_DIR/capricorn/Image.gz-dtb
