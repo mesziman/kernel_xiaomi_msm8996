@@ -8,7 +8,7 @@ TOOLCHAIN32=/pipeline/build/root/toolchain/arm-linux-androideabi-4.9
 DATE=$(date +"%Y%m%d-%H%M")
 KERNEL_NAME="4.4-test"
 DEVICE="-capricorn-"
-VER="-0.1"
+VER="-0.2"
 TYPE="-HMP"
 FINAL_ZIP="$KERNEL_NAME""$DEVICE""$DATE""$TYPE""$VER".zip
 
