@@ -2479,66 +2479,6 @@ static int mxt_read_rev(struct mxt_data *data)
 	int i = 0;
 	u8 val;
 
-		if (object->num_report_ids) {
-			min_id = reportid;
-			reportid += object->num_report_ids *
-					mxt_obj_instances(object);
-			max_id = reportid - 1;
-		} else {
-			min_id = 0;
-			max_id = 0;
-		}
-
-		dev_dbg(&data->client->dev,
-			"T%u Start:%u Size:%zu Instances:%zu Report IDs:%u-%u\n",
-			object->type, object->start_address,
-			mxt_obj_size(object), mxt_obj_instances(object),
-			min_id, max_id);
-
-		switch (object->type) {
-		case MXT_GEN_MESSAGE_T5:
-			if (data->info.family_id == 0x80 &&
-			    data->info.version < 0x20) {
-				/*
-				 * On mXT224 firmware versions prior to V2.0
-				 * read and discard unused CRC byte otherwise
-				 * DMA reads are misaligned.
-				 */
-				data->T5_msg_size = mxt_obj_size(object);
-			} else {
-				/* CRC not enabled, so skip last byte */
-				data->T5_msg_size = mxt_obj_size(object) - 1;
-			}
-			data->T5_address = object->start_address;
-			break;
-		case MXT_GEN_COMMAND_T6:
-			data->T6_reportid = min_id;
-			data->T6_address = object->start_address;
-			break;
-		case MXT_GEN_POWER_T7:
-			data->T7_address = object->start_address;
-			break;
-		case MXT_TOUCH_MULTI_T9:
-			data->multitouch = MXT_TOUCH_MULTI_T9;
-			/* Only handle messages from first T9 instance */
-			data->T9_reportid_min = min_id;
-			data->T9_reportid_max = min_id +
-						object->num_report_ids - 1;
-			data->num_touchids = object->num_report_ids;
-			break;
-		case MXT_SPT_MESSAGECOUNT_T44:
-			data->T44_address = object->start_address;
-			break;
-		case MXT_SPT_GPIOPWM_T19:
-			data->T19_reportid = min_id;
-			break;
-		}
-
-		end_address = object->start_address
-			+ mxt_obj_size(object) * mxt_obj_instances(object) - 1;
-
-		if (end_address >= data->mem_size)
-			data->mem_size = end_address + 1;
 	ret = mxt_write_object(data, MXT_GEN_COMMAND_T6,
 				MXT_COMMAND_DIAGNOSTIC, 0x80);
 	if (ret) {

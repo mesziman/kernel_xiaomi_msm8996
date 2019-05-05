@@ -5527,6 +5527,8 @@ static int msm_dai_q6_mi2s_dev_probe(struct platform_device *pdev)
 	u32 tx_line = 0;
 	u32  rx_line = 0;
 	u32 mi2s_intf = 0;
+	u32 mi2s_slave = 0;
+	u32 mi2s_ext_mclk_rate = 0;
 	struct msm_mi2s_pdata *mi2s_pdata;
 	int rc;
 	char boot_marker[40];
