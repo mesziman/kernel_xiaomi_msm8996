@@ -1869,7 +1869,7 @@
 
 		ramoops_mem: ramoops_region@92900000 {
 			compatible = "removed-dma-pool";
-			reg = <0x0 0x92900000 0x0 0x00100000>;
+			reg = <0 0x92900000 0 0x00100000>;
                         label = "ramoops_mem";
 		};
 	};
@@ -2000,6 +2000,7 @@
 		compatible = "ramoops";
 		status = "ok";
                 memory-region = <&ramoops_mem>;
+
 		console-size = <0x0 0x00080000>;
 		pmsg-size    = <0x0 0x00040000>;
 		record-size  = <0x0 0x00008000>;
