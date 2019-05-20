@@ -61,7 +61,7 @@ make O=out -C $KERNEL_DIR  -j$( nproc --all ) ARCH=arm64 CC=clang CXX=clang++ CL
 CROSS_COMPILE=aarch64-linux-android-
 {
 cp $KERNEL_DIR/out/arch/arm64/boot/Image.gz-dtb $ANYKERNEL_DIR/capricorn
-cp core* ${WERCKER_REPORT_ARTIFACTS_DIR}/
+find out --name core* -exec cp {} ${WERCKER_REPORT_ARTIFACTS_DIR}/ \;
 } || {
 if [ $? != 0 ]; then
   echo "FAILED BUILD"
