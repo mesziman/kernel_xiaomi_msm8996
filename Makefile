@@ -629,6 +629,7 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning, stringop-overflow)
 KBUILD_CFLAGS	+= $(call cc-disable-warning,array-bounds)
 KBUILD_CFLAGS	+= $(call cc-disable-warning,nonnull)
 KBUILD_CFLAGS	+= $(call cc-disable-warning,memset-elt-size)
+KBUILD_CFLAGS	+= $(call cc-disable-warning, address-of-packed-member)
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS	+= -Os $(call cc-disable-warning,maybe-uninitialized,)
