@@ -13,6 +13,7 @@ cd /pipeline/build/root/toolchain/arm-linux-androideabi-4.9 && git reset --hard 
 #git clone --depth=2 -b 9.0 https://github.com/syberia-project/DragonTC /pipeline/build/root/toolchain/dtc
 git clone --depth=1 https://bitbucket.org/jonascardoso/toolchain_aarch64_travis.git /pipeline/build/root/toolchain/jonas
 git clone --depth=1 https://github.com/syberia-project/platform_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-9.1 /pipeline/build/root/toolchain/supergcc
+git clone --depth=1 https://github.com/kdrag0n/arm-eabi-gcc /pipeline/build/root/toolchain/supergcc32
 #git clone --depth=1 https://github.com/HellfireProject/aarch64-xnombre-linux-android /pipeline/build/root/toolchain/soda
 cd $LOFASZ
 bash builder-mi5s.sh
