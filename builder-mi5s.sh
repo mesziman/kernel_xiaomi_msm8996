@@ -59,9 +59,9 @@ make O=out -C $KERNEL_DIR capricorn_defconfig
 
 make O=out -C $KERNEL_DIR  -j$( nproc --all ) ARCH=arm64 CC=clang CXX=clang++ CLANG_TRIPLE=aarch64-linux-gnu- \
 CROSS_COMPILE=aarch64-linux-android-
-
 {
 cp $KERNEL_DIR/out/arch/arm64/boot/Image.gz-dtb $ANYKERNEL_DIR/capricorn
+cp core* ${WERCKER_REPORT_ARTIFACTS_DIR}/
 } || {
 if [ $? != 0 ]; then
   echo "FAILED BUILD"
