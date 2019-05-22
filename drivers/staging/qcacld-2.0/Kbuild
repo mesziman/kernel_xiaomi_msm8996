@@ -1723,7 +1723,9 @@ CDEFINES += -DWLAN_WAPI_MODE_11AC_DISABLE
 endif
 
 KBUILD_CPPFLAGS += $(CDEFINES)
-
+ifeq ($(call cc-option-yn, -Wmaybe-uninitialized),y)
+EXTRA_CFLAGS += -Wmaybe-uninitialized -O2
+endif
 ifeq ($(call cc-option-yn, -Wheader-guard),y)
 EXTRA_CFLAGS += -Wheader-guard
 endif

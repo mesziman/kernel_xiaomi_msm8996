@@ -402,7 +402,9 @@ KBUILD_CFLAGS   := -Werror -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -fno-strict-aliasing -fno-common \
 		   -Werror-implicit-function-declaration \
 		   -Wno-format-security \
-		   -std=gnu89
+       -mcpu=cortex-a57.cortex-a53 -mtune=cortex-a57.cortex-a53 \
+       -Wno-format-truncation \
+       -fno-store-merging -std=gnu89 $(call cc-option,-fno-PIE) -Wno-address-of-packed-member -Wno-missing-attributes
 
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
@@ -615,8 +617,18 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning, format-truncation)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, format-overflow)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, int-in-bool-context)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, attribute-alias)
-KBUILD_CFLAGS	+= $(call cc-option,-fno-PIE)
-KBUILD_AFLAGS	+= $(call cc-option,-fno-PIE)
+KBUILD_CFLAGS  += $(call cc-disable-warning, maybe-uninitialized)
+KBUILD_CFLAGS  += $(call cc-disable-warning, missing-attributes)
+KBUILD_CFLAGS  += $(call cc-option,-fno-PIE)
+KBUILD_AFLAGS  += $(call cc-option,-fno-PIE)
+
+# Needed to unbreak GCC 7.x and above
+KBUILD_CFLAGS  += $(call cc-option,-fno-store-merging,)
+KBUILD_CFLAGS  += $(call cc-disable-warning, stringop-overflow)
+KBUILD_CFLAGS  += $(call cc-disable-warning,array-bounds)
+KBUILD_CFLAGS  += $(call cc-disable-warning,nonnull)
+KBUILD_CFLAGS  += $(call cc-disable-warning,memset-elt-size)
+KBUILD_CFLAGS  += $(call cc-disable-warning, address-of-packed-memb)
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS	+= -Os $(call cc-disable-warning,maybe-uninitialized,)
