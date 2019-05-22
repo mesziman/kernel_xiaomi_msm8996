@@ -14,8 +14,8 @@ TOOLCHAIN32=/pipeline/build/root/toolchain/supergcc32
 #TOOLGC=/pipeline/build/root/toolchain/gclang/clang-r349610/
 DATE=$(date +"%d%m%Y")
 KERNEL_NAME="KernelX"
-DEVICE="-capricorn-"
-TYPE="-PIE-EAS-"
+DEVICE="-capricorn"
+TYPE="-PIE-HMP-"
 FINAL_ZIP="$KERNEL_NAME""$DEVICE""$TYPE""$DATE".zip
 
 rm $ANYKERNEL_DIR/capricorn/Image.gz-dtb
