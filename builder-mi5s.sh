@@ -7,11 +7,8 @@ CCACHEDIR=../CCACHE/capricorn
 #TOOLCHAINDIR=/pipeline/build/root/toolchain/soda
 #TOOLCHAINDIR=/pipeline/build/root/toolchain/jonas/linaro_gcc/aarch64-linux-gnu-7.4.1-2019.02
 
-#TOOLCHAINDIR=/pipeline/build/root/toolchain/supergcc
-#TOOLCHAIN32=/pipeline/build/root/toolchain/supergcc32
-TOOLCHAINDIR=/pipeline/build/root/toolchain/korg/gcc-8.1.0-nolibc/aarch64-linux
-TOOLCHAIN32=/pipeline/build/root/toolchain/korg/gcc-8.1.0-nolibc/arm-linux-gnueabi
-
+TOOLCHAINDIR=/pipeline/build/root/toolchain/supergcc
+TOOLCHAIN32=/pipeline/build/root/toolchain/supergcc32
 #TOOLCHAIN32=/pipeline/build/root/toolchain/arm-linux-androideabi-4.9
 #TOOLDTC=/pipeline/build/root/toolchain/dtc
 #TOOLGC=/pipeline/build/root/toolchain/gclang/clang-r349610/
@@ -40,8 +37,8 @@ export KBUILD_BUILD_HOST="github"
  #export CXX=/pipeline/build/root/toolchain/gclang/clang-r349610/bin/clang++
 #export cc-name=clang
 # export CLANG_TRIPLE=aarch64-linux-gnu-
-export CROSS_COMPILE=aarch64-linux-
-export CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+ export CROSS_COMPILE=aarch64-elf-
+ export CROSS_COMPILE_ARM32=arm-eabi-
 #export CROSS_COMPILE=aarch64-linux-android-
 #export CROSS_COMPILE_ARM32=arm-linux-androideabi-
 #export LD_LIBRARY_PATH=$TOOLCHAINDIR/lib/
@@ -51,7 +48,7 @@ export CCACHE_DIR=$CCACHEDIR/.ccache
 make clean && make mrproper
 make O=out -C $KERNEL_DIR capricorn_defconfig
 
-make O=out -C $KERNEL_DIR  -j$( nproc --all ) ARCH=arm64 CROSS_COMPILE=aarch64-linux- CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+make O=out -C $KERNEL_DIR  -j$( nproc --all ) ARCH=arm64 CROSS_COMPILE=aarch64-elf- CROSS_COMPILE_ARM32=arm-linux-androideabi-
 
 {
 cp $KERNEL_DIR/out/arch/arm64/boot/Image.gz-dtb $ANYKERNEL_DIR/capricorn
