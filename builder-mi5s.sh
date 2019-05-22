@@ -13,11 +13,10 @@ TOOLCHAIN32=/pipeline/build/root/toolchain/supergcc32
 #TOOLDTC=/pipeline/build/root/toolchain/dtc
 #TOOLGC=/pipeline/build/root/toolchain/gclang/clang-r349610/
 DATE=$(date +"%d%m%Y")
-KERNEL_NAME="Syberia"
+KERNEL_NAME="KernelX"
 DEVICE="-capricorn-"
-VER="-0.5-"
-TYPE="PIE-EAS"
-FINAL_ZIP="$KERNEL_NAME""$DEVICE""$DATE""$TYPE""$VER".zip
+TYPE="-PIE-EAS-"
+FINAL_ZIP="$KERNEL_NAME""$DEVICE""$TYPE""$DATE".zip
 
 rm $ANYKERNEL_DIR/capricorn/Image.gz-dtb
 rm $KERNEL_DIR/arch/arm64/boot/Image.gz $KERNEL_DIR/arch/arm64/boot/Image.gz-dtb
