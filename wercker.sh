@@ -14,6 +14,9 @@ export LOFASZ=$PWD &&
 #git clone --depth=1 https://bitbucket.org/jonascardoso/toolchain_aarch64_travis.git /pipeline/build/root/toolchain/jonas
 git clone --depth=1 https://github.com/kdrag0n/aarch64-elf-gcc /pipeline/build/root/toolchain/supergcc
 git clone --depth=1 https://github.com/kdrag0n/arm-eabi-gcc /pipeline/build/root/toolchain/supergcc32
+mkdir -p  /pipeline/build/root/toolchain/korg && cd /pipeline/build/root/toolchain/korg && wget https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/8.1.0/x86_64-gcc-8.1.0-nolibc-aarch64-linux.tar.xz && tar xfv x86_64-gcc-8.1.0-nolibc-aarch64-linux.tar.xz \
+  && wget https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/8.1.0/x86_64-gcc-8.1.0-nolibc-arm-linux-gnueabi.tar.xz && tar xfv x86_64-gcc-8.1.0-nolibc-arm-linux-gnueabi.tar.xz
+
 #git clone --depth=1 https://github.com/HellfireProject/aarch64-xnombre-linux-android /pipeline/build/root/toolchain/soda
 cd $LOFASZ
 bash builder-mi5s.sh
