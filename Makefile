@@ -404,6 +404,7 @@ KBUILD_CFLAGS   := -Werror -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -Wno-format-security \
        -mcpu=cortex-a57.cortex-a53 -mtune=cortex-a57.cortex-a53 \
        -Wno-misleading-indentation -Wno-format-truncation -Wno-duplicate-decl-specifier \
+       -Wno-switch-unreachable -Wno-maybe-uninitialized \
        -Wno-bool-operation -Wno-return-local-addr -Wno-bool-compare -Wno-parentheses \
        -fno-store-merging -std=gnu89 $(call cc-option,-fno-PIE) -Wno-address-of-packed-member -Wno-missing-attributes
 
