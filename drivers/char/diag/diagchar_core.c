@@ -1,4 +1,4 @@
-/* Copyright (c) 2008-2018, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2008-2019, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -22,6 +22,7 @@
 #include <linux/sched.h>
 #include <linux/ratelimit.h>
 #include <linux/timer.h>
+#include <linux/sched.h>
 #include <linux/platform_device.h>
 #include <linux/msm_mhi.h>
 #ifdef CONFIG_DIAG_OVER_USB
@@ -583,8 +584,8 @@ static int diag_remove_client_entry(struct file *file)
 static int diagchar_close(struct inode *inode, struct file *file)
 {
 	int ret;
-	DIAG_LOG(DIAG_DEBUG_USERSPACE, "diag: process exit %s\n",
-		current->comm);
+	DIAG_LOG(DIAG_DEBUG_USERSPACE, "diag: %s process exit with pid = %d\n",
+		current->comm, current->tgid);
 	ret = diag_remove_client_entry(file);
 	mutex_lock(&driver->diag_maskclear_mutex);
 	driver->mask_clear = 0;
@@ -3089,13 +3090,13 @@ static int diag_user_process_apps_data(const char __user *buf, int len,
 	mutex_lock(&apps_data_mutex);
 	mutex_lock(&driver->hdlc_disable_mutex);
 	hdlc_disabled = driver->p_hdlc_disabled[APPS_DATA];
+	mutex_unlock(&driver->hdlc_disable_mutex);
 	if (hdlc_disabled)
 		ret = diag_process_apps_data_non_hdlc(user_space_data, len,
 						      pkt_type);
 	else
 		ret = diag_process_apps_data_hdlc(user_space_data, len,
 						  pkt_type);
-	mutex_unlock(&driver->hdlc_disable_mutex);
 	mutex_unlock(&apps_data_mutex);
 
 	diagmem_free(driver, user_space_data, mempool);
@@ -3124,6 +3125,8 @@ static ssize_t diagchar_read(struct file *file, char __user *buf, size_t count,
 	int exit_stat = 0;
 	int write_len = 0;
 	struct diag_md_session_t *session_info = NULL;
+	struct pid *pid_struct = NULL;
+	struct task_struct *task_s = NULL;
 
 	mutex_lock(&driver->diagchar_mutex);
 	for (i = 0; i < driver->num_clients; i++)
@@ -3331,17 +3334,40 @@ exit:
 		list_for_each_safe(start, temp, &driver->dci_client_list) {
 			entry = list_entry(start, struct diag_dci_client_tbl,
 									track);
-			if (entry->client->tgid != current->tgid)
+			pid_struct = find_get_pid(entry->tgid);
+			if (!pid_struct)
 				continue;
-			if (!entry->in_service)
+			task_s = get_pid_task(pid_struct, PIDTYPE_PID);
+			if (!task_s) {
+				DIAG_LOG(DIAG_DEBUG_DCI,
+				"diag: valid task doesn't exist for pid = %d\n",
+				entry->tgid);
+				put_pid(pid_struct);
 				continue;
+			}
+			if (task_s == entry->client) {
+				if (entry->client->tgid != current->tgid) {
+					put_task_struct(task_s);
+					put_pid(pid_struct);
+					continue;
+				}
+			}
+			if (!entry->in_service) {
+				put_task_struct(task_s);
+				put_pid(pid_struct);
+				continue;
+			}
 			if (copy_to_user(buf + ret, &data_type, sizeof(int))) {
+				put_task_struct(task_s);
+				put_pid(pid_struct);
 				mutex_unlock(&driver->dci_mutex);
 				goto end;
 			}
 			ret += sizeof(int);
 			if (copy_to_user(buf + ret, &entry->client_info.token,
 				sizeof(int))) {
+				put_task_struct(task_s);
+				put_pid(pid_struct);
 				mutex_unlock(&driver->dci_mutex);
 				goto end;
 			}
@@ -3353,9 +3379,13 @@ exit:
 			atomic_dec(&driver->data_ready_notif[index]);
 			mutex_unlock(&driver->diagchar_mutex);
 			if (exit_stat == 1) {
+				put_task_struct(task_s);
+				put_pid(pid_struct);
 				mutex_unlock(&driver->dci_mutex);
 				goto end;
 			}
+			put_task_struct(task_s);
+			put_pid(pid_struct);
 		}
 		mutex_unlock(&driver->dci_mutex);
 		goto end;

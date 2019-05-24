@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 /* Copyright (c) 2012-2018, The Linux Foundation. All rights reserved.
  * Copyright (C) 2018 XiaoMi, Inc.
+=======
+/* Copyright (c) 2012-2019, The Linux Foundation. All rights reserved.
+>>>>>>> LA.UM.7.5.2.r1-02900-8x96.0
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -283,8 +287,43 @@ static int32_t sp_make_afe_callback(uint32_t *payload, uint32_t payload_size)
 	struct afe_spkr_prot_calib_get_resp *resp =
 		(struct afe_spkr_prot_calib_get_resp *) payload;
 
+<<<<<<< HEAD
 	if (!(&(resp->pdata))) {
 		pr_err("%s: Error: resp pdata is NULL\n", __func__);
+=======
+	/* Set command specific details */
+	switch (opcode) {
+	case AFE_PORT_CMDRSP_GET_PARAM_V2:
+		if (payload_size < (5 * sizeof(uint32_t))) {
+			pr_err("%s: Error: size %d is less than expected\n",
+				__func__, payload_size);
+			return -EINVAL;
+		}
+		expected_size += sizeof(struct param_hdr_v1);
+		param_hdr.module_id = payload[1];
+		param_hdr.instance_id = INSTANCE_ID_0;
+		param_hdr.param_id = payload[2];
+		param_hdr.param_size = payload[3];
+		data_start = &payload[4];
+		break;
+	case AFE_PORT_CMDRSP_GET_PARAM_V3:
+		if (payload_size < (6 * sizeof(uint32_t))) {
+			pr_err("%s: Error: size %d is less than expected\n",
+				__func__, payload_size);
+			return -EINVAL;
+		}
+		expected_size += sizeof(struct param_hdr_v3);
+		if (payload_size < expected_size) {
+			pr_err("%s: Error: size %d is less than expected\n",
+				__func__, payload_size);
+			return -EINVAL;
+		}
+		memcpy(&param_hdr, &payload[1], sizeof(struct param_hdr_v3));
+		data_start = &payload[5];
+		break;
+	default:
+		pr_err("%s: Unrecognized command %d\n", __func__, opcode);
+>>>>>>> LA.UM.7.5.2.r1-02900-8x96.0
 		return -EINVAL;
 	}
 
@@ -437,6 +476,15 @@ static int32_t afe_lpass_resources_callback(struct apr_client_data *data)
 	return 0;
 }
 
+static bool afe_token_is_valid(uint32_t token)
+{
+	if (token >= AFE_MAX_PORTS) {
+		pr_err("%s: token %d is invalid.\n", __func__, token);
+		return false;
+	}
+	return true;
+}
+
 static int32_t afe_callback(struct apr_client_data *data, void *priv)
 {
 	if (!data) {
@@ -498,6 +546,11 @@ static int32_t afe_callback(struct apr_client_data *data, void *priv)
 	afe_callback_debug_print(data);
 	if (data->opcode == AFE_PORT_CMDRSP_GET_PARAM_V2) {
 		uint32_t *payload = data->payload;
+<<<<<<< HEAD
+=======
+		uint32_t param_id;
+		uint32_t param_id_pos = 0;
+>>>>>>> LA.UM.7.5.2.r1-02900-8x96.0
 
 		if (!payload || (data->token >= AFE_MAX_PORTS)) {
 			pr_err("%s: Error: size %d payload %pK token %d\n",
@@ -506,6 +559,7 @@ static int32_t afe_callback(struct apr_client_data *data, void *priv)
 			return -EINVAL;
 		}
 
+<<<<<<< HEAD
 		if (payload[2] == AFE_PARAM_ID_DEV_TIMING_STATS) {
 			av_dev_drift_afe_cb_handler(data->payload,
 						    data->payload_size);
@@ -515,6 +569,29 @@ static int32_t afe_callback(struct apr_client_data *data, void *priv)
 				return 0;
 
 			if (sp_make_afe_callback(data->payload,
+=======
+		if (rtac_make_afe_callback(data->payload,
+					   data->payload_size))
+			return 0;
+
+		if (data->opcode == AFE_PORT_CMDRSP_GET_PARAM_V3)
+			param_id_pos = 4;
+		else
+			param_id_pos = 3;
+
+		if (data->payload_size >= param_id_pos * sizeof(uint32_t))
+			param_id = payload[param_id_pos - 1];
+		else {
+			pr_err("%s: Error: size %d is less than expected\n",
+				__func__, data->payload_size);
+			return -EINVAL;
+		}
+		if (param_id == AFE_PARAM_ID_DEV_TIMING_STATS) {
+			av_dev_drift_afe_cb_handler(data->opcode, data->payload,
+						    data->payload_size);
+		} else {
+			if (sp_make_afe_callback(data->opcode, data->payload,
+>>>>>>> LA.UM.7.5.2.r1-02900-8x96.0
 						 data->payload_size))
 				return -EINVAL;
 		}
@@ -524,7 +601,10 @@ static int32_t afe_callback(struct apr_client_data *data, void *priv)
 
 		ret = afe_lpass_resources_callback(data);
 		atomic_set(&this_afe.state, 0);
-		wake_up(&this_afe.wait[data->token]);
+		if (afe_token_is_valid(data->token))
+			wake_up(&this_afe.wait[data->token]);
+		else
+			return -EINVAL;
 		if (!ret) {
 			return ret;
 		}
@@ -538,6 +618,11 @@ static int32_t afe_callback(struct apr_client_data *data, void *priv)
 		uint16_t port_id = 0;
 		payload = data->payload;
 		if (data->opcode == APR_BASIC_RSP_RESULT) {
+			if (data->payload_size < (2 * sizeof(uint32_t))) {
+				pr_err("%s: Error: size %d is less than expected\n",
+					__func__, data->payload_size);
+				return -EINVAL;
+			}
 			pr_debug("%s:opcode = 0x%x cmd = 0x%x status = 0x%x token=%d\n",
 				__func__, data->opcode,
 				payload[0], payload[1], data->token);
@@ -563,7 +648,10 @@ static int32_t afe_callback(struct apr_client_data *data, void *priv)
 			case AFE_SVC_CMD_SET_PARAM:
 			case AFE_CMD_REQUEST_LPASS_RESOURCES:
 				atomic_set(&this_afe.state, 0);
-				wake_up(&this_afe.wait[data->token]);
+				if (afe_token_is_valid(data->token))
+					wake_up(&this_afe.wait[data->token]);
+				else
+					return -EINVAL;
 				break;
 			case AFE_SERVICE_CMD_REGISTER_RT_PORT_DRIVER:
 				break;
@@ -575,7 +663,10 @@ static int32_t afe_callback(struct apr_client_data *data, void *priv)
 				break;
 			case AFE_CMD_ADD_TOPOLOGIES:
 				atomic_set(&this_afe.state, 0);
-				wake_up(&this_afe.wait[data->token]);
+				if (afe_token_is_valid(data->token))
+					wake_up(&this_afe.wait[data->token]);
+				else
+					return -EINVAL;
 				pr_debug("%s: AFE_CMD_ADD_TOPOLOGIES cmd 0x%x\n",
 						__func__, payload[1]);
 				break;
@@ -597,7 +688,10 @@ static int32_t afe_callback(struct apr_client_data *data, void *priv)
 			else
 				this_afe.mmap_handle = payload[0];
 			atomic_set(&this_afe.state, 0);
-			wake_up(&this_afe.wait[data->token]);
+			if (afe_token_is_valid(data->token))
+				wake_up(&this_afe.wait[data->token]);
+			else
+				return -EINVAL;
 		} else if (data->opcode == AFE_EVENT_RT_PROXY_PORT_STATUS) {
 			port_id = (uint16_t)(0x0000FFFF & payload[0]);
 		}
@@ -704,6 +798,18 @@ int afe_get_port_type(u16 port_id)
 	case AFE_PORT_ID_INT4_MI2S_RX:
 	case AFE_PORT_ID_INT5_MI2S_RX:
 	case AFE_PORT_ID_INT6_MI2S_RX:
+	case AFE_PORT_ID_SECONDARY_MI2S_RX_1:
+	case AFE_PORT_ID_SECONDARY_MI2S_RX_2:
+	case AFE_PORT_ID_SECONDARY_MI2S_RX_3:
+	case AFE_PORT_ID_SECONDARY_MI2S_RX_4:
+	case AFE_PORT_ID_TERTIARY_MI2S_RX_1:
+	case AFE_PORT_ID_TERTIARY_MI2S_RX_2:
+	case AFE_PORT_ID_TERTIARY_MI2S_RX_3:
+	case AFE_PORT_ID_TERTIARY_MI2S_RX_4:
+	case AFE_PORT_ID_QUATERNARY_MI2S_RX_1:
+	case AFE_PORT_ID_QUATERNARY_MI2S_RX_2:
+	case AFE_PORT_ID_QUATERNARY_MI2S_RX_3:
+	case AFE_PORT_ID_QUATERNARY_MI2S_RX_4:
 		ret = MSM_AFE_PORT_TYPE_RX;
 		break;
 
@@ -775,6 +881,18 @@ int afe_get_port_type(u16 port_id)
 	case AFE_PORT_ID_INT4_MI2S_TX:
 	case AFE_PORT_ID_INT5_MI2S_TX:
 	case AFE_PORT_ID_INT6_MI2S_TX:
+	case AFE_PORT_ID_SECONDARY_MI2S_TX_1:
+	case AFE_PORT_ID_SECONDARY_MI2S_TX_2:
+	case AFE_PORT_ID_SECONDARY_MI2S_TX_3:
+	case AFE_PORT_ID_SECONDARY_MI2S_TX_4:
+	case AFE_PORT_ID_TERTIARY_MI2S_TX_1:
+	case AFE_PORT_ID_TERTIARY_MI2S_TX_2:
+	case AFE_PORT_ID_TERTIARY_MI2S_TX_3:
+	case AFE_PORT_ID_TERTIARY_MI2S_TX_4:
+	case AFE_PORT_ID_QUATERNARY_MI2S_TX_1:
+	case AFE_PORT_ID_QUATERNARY_MI2S_TX_2:
+	case AFE_PORT_ID_QUATERNARY_MI2S_TX_3:
+	case AFE_PORT_ID_QUATERNARY_MI2S_TX_4:
 		ret = MSM_AFE_PORT_TYPE_TX;
 		break;
 
@@ -2769,6 +2887,118 @@ fail_cmd:
 	return ret;
 }
 
+int afe_i2s_port_start(u16 port_id, struct afe_i2s_port_config *i2s_port,
+		       u32 rate, u16 num_groups)
+{
+	struct param_hdr_v3 param_hdr = {0};
+	int index = 0;
+	uint16_t port_index = 0;
+	enum afe_mad_type mad_type = MAD_HW_NONE;
+	int ret = 0;
+
+	if (!i2s_port) {
+		pr_err("%s: Error, no configuration data\n", __func__);
+		return -EINVAL;
+	}
+
+	pr_debug("%s: port id: 0x%x\n", __func__, port_id);
+
+	index = q6audio_get_port_index(port_id);
+	if (index < 0 || index >= AFE_MAX_PORTS) {
+		pr_err("%s: AFE port index[%d] invalid!\n",
+				__func__, index);
+		return -EINVAL;
+	}
+	ret = q6audio_validate_port(port_id);
+	if (ret < 0) {
+		pr_err("%s: port id: 0x%x ret %d\n", __func__, port_id, ret);
+		return -EINVAL;
+	}
+
+	ret = afe_q6_interface_prepare();
+	if (ret != 0) {
+		pr_err("%s: Q6 interface prepare failed %d\n", __func__, ret);
+		return ret;
+	}
+
+	if ((index >= 0) && (index < AFE_MAX_PORTS)) {
+		this_afe.afe_sample_rates[index] = rate;
+
+		if (this_afe.rt_cb)
+			this_afe.dev_acdb_id[index] = this_afe.rt_cb(port_id);
+	}
+
+	/* Also send the topology id here if multiple ports: */
+	port_index = afe_get_port_index(port_id);
+	if (!(this_afe.afe_cal_mode[port_index] == AFE_CAL_MODE_NONE) &&
+	    num_groups > 1) {
+		/* One time call: only for first time */
+		afe_send_custom_topology();
+		afe_send_port_topology_id(port_id);
+		afe_send_cal(port_id);
+		afe_send_hw_delay(port_id, rate);
+	}
+
+	/* Start SW MAD module */
+	mad_type = afe_port_get_mad_type(port_id);
+	pr_debug("%s: port_id 0x%x, mad_type %d\n", __func__, port_id,
+		 mad_type);
+	if (mad_type != MAD_HW_NONE && mad_type != MAD_SW_AUDIO) {
+		if (!afe_has_config(AFE_CDC_REGISTERS_CONFIG) ||
+			!afe_has_config(AFE_SLIMBUS_SLAVE_CONFIG)) {
+			pr_err("%s: AFE isn't configured yet for\n"
+				"HW MAD try Again\n", __func__);
+			ret = -EAGAIN;
+			goto fail_cmd;
+		}
+		ret = afe_turn_onoff_hw_mad(mad_type, true);
+		if (ret) {
+			pr_err("%s: afe_turn_onoff_hw_mad failed %d\n",
+			       __func__, ret);
+			goto fail_cmd;
+		}
+	}
+
+	param_hdr.module_id = AFE_MODULE_AUDIO_DEV_INTERFACE;
+	param_hdr.instance_id = INSTANCE_ID_0;
+	param_hdr.param_id = AFE_PARAM_ID_I2S_CONFIG;
+	param_hdr.param_size = sizeof(struct afe_param_id_i2s_cfg);
+
+	ret = q6afe_pack_and_set_param_in_band(port_id,
+					       q6audio_get_port_index(port_id),
+					       param_hdr,
+					       (u8 *) &i2s_port->i2s_cfg);
+	if (ret) {
+		pr_err("%s: AFE enable for port 0x%x failed ret = %d\n",
+				__func__, port_id, ret);
+		goto fail_cmd;
+	}
+
+	port_index = afe_get_port_index(port_id);
+	if ((port_index >= 0) && (port_index < AFE_MAX_PORTS)) {
+		this_afe.afe_sample_rates[port_index] = rate;
+	} else {
+		pr_err("%s: Invalid port index %d\n", __func__, port_index);
+		ret = -EINVAL;
+		goto fail_cmd;
+	}
+	/* slot mapping is not need if there is only one group */
+	if (num_groups > 1) {
+		ret = afe_send_slot_mapping_cfg(
+				&i2s_port->slot_mapping,
+				port_id);
+		if (ret < 0) {
+			pr_err("%s: afe send failed %d\n", __func__, ret);
+			goto fail_cmd;
+		}
+	}
+
+	ret = afe_send_cmd_port_start(port_id);
+
+fail_cmd:
+	return ret;
+}
+
 int afe_tdm_port_start(u16 port_id, struct afe_tdm_port_config *tdm_port,
 		       u32 rate, u16 num_groups)
 {
@@ -3677,6 +3907,54 @@ int afe_get_port_index(u16 port_id)
 		return IDX_AFE_PORT_ID_INT6_MI2S_RX;
 	case AFE_PORT_ID_INT6_MI2S_TX:
 		return IDX_AFE_PORT_ID_INT6_MI2S_TX;
+	case AFE_PORT_ID_SECONDARY_MI2S_TX_1:
+		return IDX_AFE_PORT_ID_SECONDARY_MI2S_TX_1;
+	case AFE_PORT_ID_SECONDARY_MI2S_TX_2:
+		return IDX_AFE_PORT_ID_SECONDARY_MI2S_TX_2;
+	case AFE_PORT_ID_SECONDARY_MI2S_TX_3:
+		return IDX_AFE_PORT_ID_SECONDARY_MI2S_TX_3;
+	case AFE_PORT_ID_SECONDARY_MI2S_TX_4:
+		return IDX_AFE_PORT_ID_SECONDARY_MI2S_TX_4;
+	case AFE_PORT_ID_TERTIARY_MI2S_TX_1:
+		return IDX_AFE_PORT_ID_TERTIARY_MI2S_TX_1;
+	case AFE_PORT_ID_TERTIARY_MI2S_TX_2:
+		return IDX_AFE_PORT_ID_TERTIARY_MI2S_TX_2;
+	case AFE_PORT_ID_TERTIARY_MI2S_TX_3:
+		return IDX_AFE_PORT_ID_TERTIARY_MI2S_TX_3;
+	case AFE_PORT_ID_TERTIARY_MI2S_TX_4:
+		return IDX_AFE_PORT_ID_TERTIARY_MI2S_TX_4;
+	case AFE_PORT_ID_QUATERNARY_MI2S_TX_1:
+		return IDX_AFE_PORT_ID_QUATERNARY_MI2S_TX_1;
+	case AFE_PORT_ID_QUATERNARY_MI2S_TX_2:
+		return IDX_AFE_PORT_ID_QUATERNARY_MI2S_TX_2;
+	case AFE_PORT_ID_QUATERNARY_MI2S_TX_3:
+		return IDX_AFE_PORT_ID_QUATERNARY_MI2S_TX_3;
+	case AFE_PORT_ID_QUATERNARY_MI2S_TX_4:
+		return IDX_AFE_PORT_ID_QUATERNARY_MI2S_TX_4;
+	case AFE_PORT_ID_SECONDARY_MI2S_RX_1:
+		return IDX_AFE_PORT_ID_SECONDARY_MI2S_RX_1;
+	case AFE_PORT_ID_SECONDARY_MI2S_RX_2:
+		return IDX_AFE_PORT_ID_SECONDARY_MI2S_RX_2;
+	case AFE_PORT_ID_SECONDARY_MI2S_RX_3:
+		return IDX_AFE_PORT_ID_SECONDARY_MI2S_RX_3;
+	case AFE_PORT_ID_SECONDARY_MI2S_RX_4:
+		return IDX_AFE_PORT_ID_SECONDARY_MI2S_RX_4;
+	case AFE_PORT_ID_TERTIARY_MI2S_RX_1:
+		return IDX_AFE_PORT_ID_TERTIARY_MI2S_RX_1;
+	case AFE_PORT_ID_TERTIARY_MI2S_RX_2:
+		return IDX_AFE_PORT_ID_TERTIARY_MI2S_RX_2;
+	case AFE_PORT_ID_TERTIARY_MI2S_RX_3:
+		return IDX_AFE_PORT_ID_TERTIARY_MI2S_RX_3;
+	case AFE_PORT_ID_TERTIARY_MI2S_RX_4:
+		return IDX_AFE_PORT_ID_TERTIARY_MI2S_RX_4;
+	case AFE_PORT_ID_QUATERNARY_MI2S_RX_1:
+		return IDX_AFE_PORT_ID_QUATERNARY_MI2S_RX_1;
+	case AFE_PORT_ID_QUATERNARY_MI2S_RX_2:
+		return IDX_AFE_PORT_ID_QUATERNARY_MI2S_RX_2;
+	case AFE_PORT_ID_QUATERNARY_MI2S_RX_3:
+		return IDX_AFE_PORT_ID_QUATERNARY_MI2S_RX_3;
+	case AFE_PORT_ID_QUATERNARY_MI2S_RX_4:
+		return IDX_AFE_PORT_ID_QUATERNARY_MI2S_RX_4;
 	default:
 		pr_err("%s: port 0x%x\n", __func__, port_id);
 		return -EINVAL;
@@ -4180,6 +4458,154 @@ int afe_port_group_set_param(u16 group_id,
 		pr_err("%s: AFE_PARAM_ID_GROUP_DEVICE_CFG failed %d\n",
 			__func__, ret);
 
+	return ret;
+}
+
+static int afe_port_group_mi2s_set_param(u16 group_id,
+	struct afe_param_id_group_device_i2s_cfg_v1 *afe_group_config)
+{
+	struct param_hdr_v3 param_hdr = {0};
+	int cfg_type;
+	int ret;
+
+	if (!afe_group_config) {
+		pr_err("%s: Error, no configuration data\n", __func__);
+		return -EINVAL;
+	}
+
+	pr_debug("%s: group id: 0x%x\n", __func__, group_id);
+
+	ret = afe_q6_interface_prepare();
+	if (ret != 0) {
+		pr_err("%s: Q6 interface prepare failed %d\n", __func__, ret);
+		return ret;
+	}
+
+	switch (group_id) {
+	case AFE_GROUP_DEVICE_ID_SECONDARY_MI2S_RX:
+	case AFE_GROUP_DEVICE_ID_SECONDARY_MI2S_TX:
+	case AFE_GROUP_DEVICE_ID_TERTIARY_MI2S_RX:
+	case AFE_GROUP_DEVICE_ID_TERTIARY_MI2S_TX:
+	case AFE_GROUP_DEVICE_ID_QUATERNARY_MI2S_RX:
+	case AFE_GROUP_DEVICE_ID_QUATERNARY_MI2S_TX:
+		cfg_type = AFE_PARAM_ID_GROUP_DEVICE_I2S_CONFIG;
+		break;
+	default:
+		pr_err("%s: Invalid group id 0x%x\n", __func__, group_id);
+		return -EINVAL;
+	}
+
+	param_hdr.module_id = AFE_MODULE_GROUP_DEVICE;
+	param_hdr.instance_id = INSTANCE_ID_0;
+	param_hdr.param_id = cfg_type;
+	param_hdr.param_size =
+		sizeof(struct afe_param_id_group_device_i2s_cfg_v1);
+
+	ret = q6afe_svc_pack_and_set_param_in_band(IDX_GLOBAL_CFG, param_hdr,
+						   (u8 *) afe_group_config);
+	if (ret)
+		pr_err("%s: AFE_PARAM_ID_GROUP_DEVICE_CFG failed %d\n",
+			__func__, ret);
+
+	return ret;
+}
+
+static atomic_t mi2s_gp_en_ref[IDX_GROUP_MI2S_MAX];
+static int afe_get_mi2s_group_idx(u16 group_id)
+{
+	int gp_idx = -1;
+
+	switch (group_id) {
+	case AFE_GROUP_DEVICE_ID_SECONDARY_MI2S_RX:
+		gp_idx = IDX_GROUP_SECONDARY_MI2S_RX;
+		break;
+	case AFE_GROUP_DEVICE_ID_SECONDARY_MI2S_TX:
+		gp_idx = IDX_GROUP_SECONDARY_MI2S_TX;
+		break;
+	case AFE_GROUP_DEVICE_ID_TERTIARY_MI2S_RX:
+		gp_idx = IDX_GROUP_TERTIARY_MI2S_RX;
+		break;
+	case AFE_GROUP_DEVICE_ID_TERTIARY_MI2S_TX:
+		gp_idx = IDX_GROUP_TERTIARY_MI2S_TX;
+		break;
+	case AFE_GROUP_DEVICE_ID_QUATERNARY_MI2S_RX:
+		gp_idx = IDX_GROUP_QUATERNARY_MI2S_RX;
+		break;
+	case AFE_GROUP_DEVICE_ID_QUATERNARY_MI2S_TX:
+		gp_idx = IDX_GROUP_QUATERNARY_MI2S_TX;
+		break;
+	default:
+		break;
+	}
+
+	return gp_idx;
+}
+
+int afe_port_group_mi2s_enable(u16 group_id,
+	union afe_port_group_mi2s_config *afe_group_config,
+	u16 enable)
+{
+	struct afe_param_id_group_device_enable group_enable = {0};
+	struct param_hdr_v3 param_hdr = {0};
+	int ret = 0;
+	int gp_idx;
+
+	pr_debug("%s: group id: 0x%x enable: %d\n", __func__,
+		group_id, enable);
+
+	gp_idx = afe_get_mi2s_group_idx(group_id);
+
+	if ((gp_idx >= 0) && (gp_idx < IDX_GROUP_MI2S_MAX)) {
+
+		atomic_t *gp_ref = &mi2s_gp_en_ref[gp_idx];
+
+		if (enable)
+			atomic_inc(gp_ref);
+		else
+			atomic_dec(gp_ref);
+
+		if ((enable) && (atomic_read(gp_ref) > 1)) {
+			pr_err("%s: this TDM group is enabled already %d  refs_cnt %d\n",
+				__func__, group_id, atomic_read(gp_ref));
+			goto rtn;
+		}
+
+		if ((!enable) && (atomic_read(gp_ref) > 0)) {
+			pr_err("%s: this TDM group will be disabled in last call %d refs_cnt %d\n",
+				__func__, group_id, atomic_read(gp_ref));
+			goto rtn;
+		}
+	}
+
+	ret = afe_q6_interface_prepare();
+	if (ret != 0) {
+		pr_err("%s: Q6 interface prepare failed %d\n", __func__, ret);
+		return ret;
+	}
+
+	if (enable) {
+		ret = afe_port_group_mi2s_set_param(
+			group_id, &afe_group_config->i2s_cfg);
+		if (ret < 0) {
+			pr_err("%s: afe send failed %d\n", __func__, ret);
+			return ret;
+		}
+	}
+
+	param_hdr.module_id = AFE_MODULE_GROUP_DEVICE;
+	param_hdr.instance_id = INSTANCE_ID_0;
+	param_hdr.param_id = AFE_PARAM_ID_GROUP_DEVICE_ENABLE;
+	param_hdr.param_size = sizeof(struct afe_group_device_enable);
+	group_enable.group_id = group_id;
+	group_enable.enable = enable;
+
+	ret = q6afe_svc_pack_and_set_param_in_band(IDX_GLOBAL_CFG, param_hdr,
+						   (u8 *) &group_enable);
+	if (ret)
+		pr_err("%s: AFE_PARAM_ID_GROUP_DEVICE_ENABLE failed %d\n",
+			__func__, ret);
+
+rtn:
 	return ret;
 }
 

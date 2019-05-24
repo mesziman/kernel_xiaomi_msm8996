@@ -72,6 +72,7 @@ obj-$(CONFIG_QCOM_MEMORY_DUMP_V2) += memory_dump_v2.o
 obj-$(CONFIG_QCOM_MINIDUMP) += msm_minidump.o
 obj-$(CONFIG_QCOM_DCC) += dcc.o
 obj-$(CONFIG_QCOM_WATCHDOG_V2) += watchdog_v2.o
+obj-$(CONFIG_QCOM_EARLY_DOMAIN)	+= early_dom.o
 obj-$(CONFIG_QCOM_COMMON_LOG) += common_log.o
 obj-$(CONFIG_QCOM_IRQ_HELPER) += irq-helper.o
 obj-$(CONFIG_TRACER_PKT)	+=	tracer_pkt.o
@@ -114,3 +115,4 @@ obj-$(CONFIG_MSM_HAB) += hab/
 obj-$(CONFIG_QCOM_QDSS_BRIDGE) += qdss_bridge.o
 
 CFLAGS_tracer_pkt.o := -I$(src)
+obj-$(CONFIG_MFSE_QMI) += mfse_qmi_v01.o mfse_qmi.o

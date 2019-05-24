@@ -1,4 +1,5 @@
 /* Copyright (c) 2014-2018, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2014-2017, 2019, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -3559,7 +3560,6 @@ static int fg_cap_learning_process_full_data(struct fg_chip *chip)
 		fg_cap_learning_stop(chip);
 		goto fail;
 	}
-
 	rc = fg_get_cc_soc(chip, &cc_pc_val);
 	if (rc) {
 		pr_err("failed to get CC_SOC, stopping capacity learning\n");
