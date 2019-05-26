@@ -5766,7 +5766,6 @@ static int smbchg_usb_get_property(struct power_supply *psy,
 	switch (psp) {
 	case POWER_SUPPLY_PROP_SDP_CURRENT_MAX:
 	case POWER_SUPPLY_PROP_CURRENT_MAX:
-	case POWER_SUPPLY_PROP_SDP_CURRENT_MAX:
 		if (chip->usb_icl_votable)
 			val->intval = get_client_vote(chip->usb_icl_votable,
 						PSY_ICL_VOTER) * 1000;
@@ -5782,9 +5781,6 @@ static int smbchg_usb_get_property(struct power_supply *psy,
 	case POWER_SUPPLY_PROP_REAL_TYPE:
 	case POWER_SUPPLY_PROP_TYPE:
 		val->intval = chip->usb_psy_d.type;
-		break;
-	case POWER_SUPPLY_PROP_REAL_TYPE:
-		val->intval = chip->usb_supply_type;
 		break;
 	case POWER_SUPPLY_PROP_HEALTH:
 		val->intval = chip->usb_health;
@@ -5802,10 +5798,6 @@ static int smbchg_usb_set_property(struct power_supply *psy,
 	struct smbchg_chip *chip = power_supply_get_drvdata(psy);
 
 	switch (psp) {
-	case POWER_SUPPLY_PROP_SDP_CURRENT_MAX:
-	case POWER_SUPPLY_PROP_CURRENT_MAX:
-		chip->usb_current_max = val->intval;
-		break;
 	case POWER_SUPPLY_PROP_ONLINE:
 		chip->usb_online = val->intval;
 		break;
@@ -5826,7 +5818,6 @@ smbchg_usb_is_writeable(struct power_supply *psy,
 	switch (psp) {
 	case POWER_SUPPLY_PROP_SDP_CURRENT_MAX:
 	case POWER_SUPPLY_PROP_CURRENT_MAX:
-	case POWER_SUPPLY_PROP_SDP_CURRENT_MAX:
 		return 1;
 	default:
 		break;
