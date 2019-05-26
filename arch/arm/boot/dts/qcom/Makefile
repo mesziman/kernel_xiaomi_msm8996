@@ -24,6 +24,7 @@ dtb-$(CONFIG_MACH_XIAOMI_A8) += \
 dtb-$(CONFIG_MACH_XIAOMI_B7) += \
 	b7-msm8996-v3.0-pmi8996-mtp.dtb \
 	b7-msm8996pro-pmi8996-mtp.dtb
+endif
 ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
 dtbo-$(CONFIG_ARCH_MSM8996) += \
 	msm8996-mtp-overlay.dtbo \
