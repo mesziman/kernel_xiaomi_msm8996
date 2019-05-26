@@ -4724,14 +4724,8 @@ static void handle_usb_removal(struct smbchg_chip *chip)
 	/* Clear typec current status */
 	if (chip->typec_psy)
 		chip->typec_current_ma = 0;
-<<<<<<< HEAD
+
 	smbchg_change_usb_supply_type(chip, POWER_SUPPLY_TYPE_USB);
-=======
-	/* cancel/wait for hvdcp pending work if any */
-	cancel_delayed_work_sync(&chip->hvdcp_det_work);
-	smbchg_relax(chip, PM_DETECT_HVDCP);
-	smbchg_change_usb_supply_type(chip, POWER_SUPPLY_TYPE_UNKNOWN);
->>>>>>> LA.UM.7.5.2.r1-02900-8x96.0
 	extcon_set_cable_state_(chip->extcon, EXTCON_USB, chip->usb_present);
 	smbchg_request_dpdm(chip, false);
 	schedule_work(&chip->usb_set_online_work);
@@ -5808,13 +5802,10 @@ static int smbchg_usb_set_property(struct power_supply *psy,
 	struct smbchg_chip *chip = power_supply_get_drvdata(psy);
 
 	switch (psp) {
-<<<<<<< HEAD
 	case POWER_SUPPLY_PROP_SDP_CURRENT_MAX:
 	case POWER_SUPPLY_PROP_CURRENT_MAX:
 		chip->usb_current_max = val->intval;
 		break;
-=======
->>>>>>> LA.UM.7.5.2.r1-02900-8x96.0
 	case POWER_SUPPLY_PROP_ONLINE:
 		chip->usb_online = val->intval;
 		break;
