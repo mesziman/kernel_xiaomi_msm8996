@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 /* Copyright (c) 2012-2018, The Linux Foundation. All rights reserved.
  * Copyright (C) 2018 XiaoMi, Inc.
-=======
-/* Copyright (c) 2012-2019, The Linux Foundation. All rights reserved.
->>>>>>> LA.UM.7.5.2.r1-02900-8x96.0
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -1339,8 +1335,7 @@ int adm_get_multi_ch_map(char *channel_map, int path)
 	return 0;
 }
 
-<<<<<<< HEAD
-=======
+
 static int adm_process_get_param_response(u32 opcode, u32 idx, u32 *payload,
 					  u32 payload_size)
 {
@@ -1458,7 +1453,6 @@ static int adm_process_get_topo_list_response(u32 opcode, int copp_idx,
 	return 0;
 }
 
->>>>>>> LA.UM.7.5.2.r1-02900-8x96.0
 static int32_t adm_callback(struct apr_client_data *data, void *priv)
 {
 	uint32_t *payload;
@@ -1685,23 +1679,9 @@ static int32_t adm_callback(struct apr_client_data *data, void *priv)
 
 		switch (data->opcode) {
 		case ADM_CMDRSP_DEVICE_OPEN_V5:
-<<<<<<< HEAD
-		case ADM_CMDRSP_DEVICE_OPEN_V6: {
-			struct adm_cmd_rsp_device_open_v5 *open =
-			(struct adm_cmd_rsp_device_open_v5 *)data->payload;
-=======
 		case ADM_CMDRSP_DEVICE_OPEN_V6:
 		case ADM_CMDRSP_DEVICE_OPEN_V8: {
-			struct adm_cmd_rsp_device_open_v5 *open = NULL;
->>>>>>> LA.UM.7.5.2.r1-02900-8x96.0
-
-			if (data->payload_size <
-				sizeof(struct adm_cmd_rsp_device_open_v5)) {
-				pr_err("%s: Invalid payload size %d\n",
-					__func__, data->payload_size);
-				return 0;
-			}
-			open =
+			struct adm_cmd_rsp_device_open_v5 *open =
 			    (struct adm_cmd_rsp_device_open_v5 *)data->payload;
 			if (open->copp_id == INVALID_COPP_ID) {
 				pr_err("%s: invalid coppid rxed %d\n",
@@ -1771,7 +1751,6 @@ static int32_t adm_callback(struct apr_client_data *data, void *priv)
 		case ADM_CMDRSP_GET_PP_TOPO_MODULE_LIST:
 			pr_debug("%s: ADM_CMDRSP_GET_PP_TOPO_MODULE_LIST\n",
 				 __func__);
-<<<<<<< HEAD
 			if (payload[0] != 0) {
 				pr_err("%s: ADM_CMDRSP_GET_PP_TOPO_MODULE_LIST",
 					 __func__);
@@ -1794,30 +1773,6 @@ static int32_t adm_callback(struct apr_client_data *data, void *priv)
 					pr_debug("%s:payload[%d] = %x\n",
 						 __func__, (i+1), payload[1+i]);
 				}
-=======
-			if (data->payload_size >= (2 * sizeof(uint32_t))) {
-				num_modules = payload[1];
-				pr_debug("%s: Num modules %d\n", __func__,
-					 num_modules);
-				if (payload[0]) {
-					pr_err("%s: ADM_CMDRSP_GET_PP_TOPO_MODULE_LIST, error = %d\n",
-					       __func__, payload[0]);
-				} else if (num_modules > MAX_MODULES_IN_TOPO) {
-					pr_err("%s: ADM_CMDRSP_GET_PP_TOPO_MODULE_LIST invalid num modules received, num modules = %d\n",
-					       __func__, num_modules);
-				} else {
-					ret = adm_process_get_topo_list_response
-						(data->opcode, copp_idx,
-						num_modules, payload,
-						data->payload_size);
-					if (ret)
-						pr_err("%s: Failed to process get topo modules list response, error %d\n",
-						       __func__, ret);
-				}
-			} else {
-				pr_err("%s: Invalid payload size %d\n",
-					__func__, data->payload_size);
->>>>>>> LA.UM.7.5.2.r1-02900-8x96.0
 			}
 			atomic_set(&this_adm.copp.stat
 				[port_idx][copp_idx], payload[0]);
@@ -2578,9 +2533,9 @@ int adm_arrange_mch_ep2_map(struct adm_cmd_device_open_v6 *open_v6,
 	return rc;
 }
 
-<<<<<<< HEAD
+
 #define ADM_COPP_SPEAKER_MONO_PROTECT_TOPO 0x1000ffe8
-=======
+
 static int adm_arrange_mch_map_v8(
 		struct adm_device_endpoint_payload *ep_payload,
 		int path,
@@ -3081,7 +3036,6 @@ static int adm_open_v5_v6(int tmp_port, int port_idx, int copp_idx,
 
 	return ret;
 }
->>>>>>> LA.UM.7.5.2.r1-02900-8x96.0
 
 int adm_open(int port_id, int path, int rate, int channel_mode, int topology,
 	     int perf_mode, uint16_t bit_width, int app_type, int acdb_id,

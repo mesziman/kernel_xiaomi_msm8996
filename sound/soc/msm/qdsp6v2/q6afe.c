@@ -1,9 +1,6 @@
-<<<<<<< HEAD
+
 /* Copyright (c) 2012-2018, The Linux Foundation. All rights reserved.
  * Copyright (C) 2018 XiaoMi, Inc.
-=======
-/* Copyright (c) 2012-2019, The Linux Foundation. All rights reserved.
->>>>>>> LA.UM.7.5.2.r1-02900-8x96.0
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -287,43 +284,9 @@ static int32_t sp_make_afe_callback(uint32_t *payload, uint32_t payload_size)
 	struct afe_spkr_prot_calib_get_resp *resp =
 		(struct afe_spkr_prot_calib_get_resp *) payload;
 
-<<<<<<< HEAD
 	if (!(&(resp->pdata))) {
 		pr_err("%s: Error: resp pdata is NULL\n", __func__);
-=======
-	/* Set command specific details */
-	switch (opcode) {
-	case AFE_PORT_CMDRSP_GET_PARAM_V2:
-		if (payload_size < (5 * sizeof(uint32_t))) {
-			pr_err("%s: Error: size %d is less than expected\n",
-				__func__, payload_size);
-			return -EINVAL;
-		}
-		expected_size += sizeof(struct param_hdr_v1);
-		param_hdr.module_id = payload[1];
-		param_hdr.instance_id = INSTANCE_ID_0;
-		param_hdr.param_id = payload[2];
-		param_hdr.param_size = payload[3];
-		data_start = &payload[4];
-		break;
-	case AFE_PORT_CMDRSP_GET_PARAM_V3:
-		if (payload_size < (6 * sizeof(uint32_t))) {
-			pr_err("%s: Error: size %d is less than expected\n",
-				__func__, payload_size);
-			return -EINVAL;
-		}
-		expected_size += sizeof(struct param_hdr_v3);
-		if (payload_size < expected_size) {
-			pr_err("%s: Error: size %d is less than expected\n",
-				__func__, payload_size);
-			return -EINVAL;
-		}
-		memcpy(&param_hdr, &payload[1], sizeof(struct param_hdr_v3));
-		data_start = &payload[5];
-		break;
-	default:
-		pr_err("%s: Unrecognized command %d\n", __func__, opcode);
->>>>>>> LA.UM.7.5.2.r1-02900-8x96.0
+
 		return -EINVAL;
 	}
 
@@ -546,11 +509,9 @@ static int32_t afe_callback(struct apr_client_data *data, void *priv)
 	afe_callback_debug_print(data);
 	if (data->opcode == AFE_PORT_CMDRSP_GET_PARAM_V2) {
 		uint32_t *payload = data->payload;
-<<<<<<< HEAD
-=======
+
 		uint32_t param_id;
 		uint32_t param_id_pos = 0;
->>>>>>> LA.UM.7.5.2.r1-02900-8x96.0
 
 		if (!payload || (data->token >= AFE_MAX_PORTS)) {
 			pr_err("%s: Error: size %d payload %pK token %d\n",
@@ -559,7 +520,6 @@ static int32_t afe_callback(struct apr_client_data *data, void *priv)
 			return -EINVAL;
 		}
 
-<<<<<<< HEAD
 		if (payload[2] == AFE_PARAM_ID_DEV_TIMING_STATS) {
 			av_dev_drift_afe_cb_handler(data->payload,
 						    data->payload_size);
@@ -569,29 +529,6 @@ static int32_t afe_callback(struct apr_client_data *data, void *priv)
 				return 0;
 
 			if (sp_make_afe_callback(data->payload,
-=======
-		if (rtac_make_afe_callback(data->payload,
-					   data->payload_size))
-			return 0;
-
-		if (data->opcode == AFE_PORT_CMDRSP_GET_PARAM_V3)
-			param_id_pos = 4;
-		else
-			param_id_pos = 3;
-
-		if (data->payload_size >= param_id_pos * sizeof(uint32_t))
-			param_id = payload[param_id_pos - 1];
-		else {
-			pr_err("%s: Error: size %d is less than expected\n",
-				__func__, data->payload_size);
-			return -EINVAL;
-		}
-		if (param_id == AFE_PARAM_ID_DEV_TIMING_STATS) {
-			av_dev_drift_afe_cb_handler(data->opcode, data->payload,
-						    data->payload_size);
-		} else {
-			if (sp_make_afe_callback(data->opcode, data->payload,
->>>>>>> LA.UM.7.5.2.r1-02900-8x96.0
 						 data->payload_size))
 				return -EINVAL;
 		}

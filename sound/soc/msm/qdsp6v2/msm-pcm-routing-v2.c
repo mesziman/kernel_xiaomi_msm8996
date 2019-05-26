@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-/* Copyright (c) 2012-2018, The Linux Foundation. All rights reserved.
- * Copyright (C) 2018 XiaoMi, Inc.
-=======
 /* Copyright (c) 2012-2019, The Linux Foundation. All rights reserved.
->>>>>>> LA.UM.7.5.2.r1-02900-8x96.0
+ * Copyright (C) 2018 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -5500,29 +5496,10 @@ static const struct snd_kcontrol_new quaternary_mi2s_rx_4_mixer_controls[] = {
 	SOC_SINGLE_EXT("MultiMedia4", MSM_BACKEND_DAI_QUATERNARY_MI2S_RX_4,
 	MSM_FRONTEND_DAI_MULTIMEDIA4, 1, 0, msm_routing_get_audio_mixer,
 	msm_routing_put_audio_mixer),
-<<<<<<< HEAD
 	SOC_SINGLE_EXT("MultiMedia7", MSM_BACKEND_DAI_TERTIARY_MI2S_RX,
 	MSM_FRONTEND_DAI_MULTIMEDIA7, 1, 0, msm_routing_get_audio_mixer,
 	msm_routing_put_audio_mixer),
 	SOC_SINGLE_EXT("MultiMedia10", MSM_BACKEND_DAI_TERTIARY_MI2S_RX,
-=======
-	SOC_SINGLE_EXT("MultiMedia5", MSM_BACKEND_DAI_QUATERNARY_MI2S_RX_4,
-	MSM_FRONTEND_DAI_MULTIMEDIA5, 1, 0, msm_routing_get_audio_mixer,
-	msm_routing_put_audio_mixer),
-	SOC_SINGLE_EXT("MultiMedia6", MSM_BACKEND_DAI_QUATERNARY_MI2S_RX_4,
-	MSM_FRONTEND_DAI_MULTIMEDIA6, 1, 0, msm_routing_get_audio_mixer,
-	msm_routing_put_audio_mixer),
-	SOC_SINGLE_EXT("MultiMedia7", MSM_BACKEND_DAI_QUATERNARY_MI2S_RX_4,
-	MSM_FRONTEND_DAI_MULTIMEDIA7, 1, 0, msm_routing_get_audio_mixer,
-	msm_routing_put_audio_mixer),
-	SOC_SINGLE_EXT("MultiMedia8", MSM_BACKEND_DAI_QUATERNARY_MI2S_RX_4,
-	MSM_FRONTEND_DAI_MULTIMEDIA8, 1, 0, msm_routing_get_audio_mixer,
-	msm_routing_put_audio_mixer),
-	SOC_SINGLE_EXT("MultiMedia9", MSM_BACKEND_DAI_QUATERNARY_MI2S_RX_4,
-	MSM_FRONTEND_DAI_MULTIMEDIA9, 1, 0, msm_routing_get_audio_mixer,
-	msm_routing_put_audio_mixer),
-	SOC_SINGLE_EXT("MultiMedia10", MSM_BACKEND_DAI_QUATERNARY_MI2S_RX_4,
->>>>>>> LA.UM.7.5.2.r1-02900-8x96.0
 	MSM_FRONTEND_DAI_MULTIMEDIA10, 1, 0, msm_routing_get_audio_mixer,
 	msm_routing_put_audio_mixer),
 	SOC_SINGLE_EXT("MultiMedia11", MSM_BACKEND_DAI_QUATERNARY_MI2S_RX_4,
@@ -14527,7 +14504,7 @@ static const struct snd_soc_dapm_widget msm_qdsp6_widgets[] = {
 		&ext_ec_ref_mux_ul1),
 	SND_SOC_DAPM_MUX("AUDIO_REF_EC_UL2 MUX", SND_SOC_NOPM, 0, 0,
 		&ext_ec_ref_mux_ul2),
-	SND_SOC_DAPM_MUX("AUDIO_REF_EC_UL3 MUX", SND_SOC_NOPM, 0, 0,	
+	SND_SOC_DAPM_MUX("AUDIO_REF_EC_UL3 MUX", SND_SOC_NOPM, 0, 0,
 		&ext_ec_ref_mux_ul3),
 	SND_SOC_DAPM_MUX("AUDIO_REF_EC_UL4 MUX", SND_SOC_NOPM, 0, 0,
 		&ext_ec_ref_mux_ul4),
@@ -14891,52 +14868,6 @@ static const struct snd_soc_dapm_route intercon[] = {
 	{"TERT_MI2S_RX Audio Mixer", "MultiMedia26", "MM_DL26"},
 	{"TERT_MI2S_RX", NULL, "TERT_MI2S_RX Audio Mixer"},
 
-<<<<<<< HEAD
-=======
-	{"SEC_MI2S_RX Audio Mixer", "MultiMedia1", "MM_DL1"},
-	{"SEC_MI2S_RX Audio Mixer", "MultiMedia2", "MM_DL2"},
-	{"SEC_MI2S_RX Audio Mixer", "MultiMedia3", "MM_DL3"},
-	{"SEC_MI2S_RX Audio Mixer", "MultiMedia4", "MM_DL4"},
-	{"SEC_MI2S_RX Audio Mixer", "MultiMedia5", "MM_DL5"},
-	{"SEC_MI2S_RX Audio Mixer", "MultiMedia6", "MM_DL6"},
-	{"SEC_MI2S_RX Audio Mixer", "MultiMedia7", "MM_DL7"},
-	{"SEC_MI2S_RX Audio Mixer", "MultiMedia8", "MM_DL8"},
-	{"SEC_MI2S_RX Audio Mixer", "MultiMedia10", "MM_DL10"},
-	{"SEC_MI2S_RX Audio Mixer", "MultiMedia11", "MM_DL11"},
-	{"SEC_MI2S_RX Audio Mixer", "MultiMedia12", "MM_DL12"},
-	{"SEC_MI2S_RX Audio Mixer", "MultiMedia13", "MM_DL13"},
-	{"SEC_MI2S_RX Audio Mixer", "MultiMedia14", "MM_DL14"},
-	{"SEC_MI2S_RX Audio Mixer", "MultiMedia15", "MM_DL15"},
-	{"SEC_MI2S_RX Audio Mixer", "MultiMedia16", "MM_DL16"},
-	{"SEC_MI2S_RX Audio Mixer", "MultiMedia21", "MM_DL21"},
-	{"SEC_MI2S_RX Audio Mixer", "MultiMedia26", "MM_DL26"},
-	{"SEC_MI2S_RX", NULL, "SEC_MI2S_RX Audio Mixer"},
-
-	{"SEC_MI2S_RX_SD1 Audio Mixer", "MultiMedia6", "MM_DL6"},
-	{"SEC_MI2S_RX_SD1", NULL, "SEC_MI2S_RX_SD1 Audio Mixer"},
-
-	{"SEC_MI2S_RX Port Mixer", "PRI_MI2S_TX", "PRI_MI2S_TX"},
-	{"SEC_MI2S_RX Port Mixer", "INTERNAL_FM_TX", "INT_FM_TX"},
-
-	{"PRI_MI2S_RX Audio Mixer", "MultiMedia1", "MM_DL1"},
-	{"PRI_MI2S_RX Audio Mixer", "MultiMedia2", "MM_DL2"},
-	{"PRI_MI2S_RX Audio Mixer", "MultiMedia3", "MM_DL3"},
-	{"PRI_MI2S_RX Audio Mixer", "MultiMedia4", "MM_DL4"},
-	{"PRI_MI2S_RX Audio Mixer", "MultiMedia5", "MM_DL5"},
-	{"PRI_MI2S_RX Audio Mixer", "MultiMedia6", "MM_DL6"},
-	{"PRI_MI2S_RX Audio Mixer", "MultiMedia7", "MM_DL7"},
-	{"PRI_MI2S_RX Audio Mixer", "MultiMedia8", "MM_DL8"},
-	{"PRI_MI2S_RX Audio Mixer", "MultiMedia10", "MM_DL10"},
-	{"PRI_MI2S_RX Audio Mixer", "MultiMedia11", "MM_DL11"},
-	{"PRI_MI2S_RX Audio Mixer", "MultiMedia12", "MM_DL12"},
-	{"PRI_MI2S_RX Audio Mixer", "MultiMedia13", "MM_DL13"},
-	{"PRI_MI2S_RX Audio Mixer", "MultiMedia14", "MM_DL14"},
-	{"PRI_MI2S_RX Audio Mixer", "MultiMedia15", "MM_DL15"},
-	{"PRI_MI2S_RX Audio Mixer", "MultiMedia16", "MM_DL16"},
-	{"PRI_MI2S_RX Audio Mixer", "MultiMedia26", "MM_DL26"},
-	{"PRI_MI2S_RX", NULL, "PRI_MI2S_RX Audio Mixer"},
-
->>>>>>> LA.UM.7.5.2.r1-02900-8x96.0
 	{"INT0_MI2S_RX Audio Mixer", "MultiMedia1", "MM_DL1"},
 	{"INT0_MI2S_RX Audio Mixer", "MultiMedia2", "MM_DL2"},
 	{"INT0_MI2S_RX Audio Mixer", "MultiMedia3", "MM_DL3"},

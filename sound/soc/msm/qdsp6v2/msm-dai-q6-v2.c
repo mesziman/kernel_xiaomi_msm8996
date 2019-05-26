@@ -4595,23 +4595,11 @@ static int msm_dai_q6_group_mi2s_set_channel_map(struct snd_soc_dai *dai,
 			unsigned int tx_num, unsigned int *tx_slot,
 			unsigned int rx_num, unsigned int *rx_slot)
 {
-<<<<<<< HEAD
-	struct msm_dai_q6_mi2s_dai_data *dai_data;
-	const char *q6_mi2s_dev_id = "qcom,msm-dai-q6-mi2s-dev-id";
-	u32 tx_line = 0;
-	u32  rx_line = 0;
-	u32 mi2s_intf = 0;
-	u32 mi2s_slave = 0;
-	u32 mi2s_ext_mclk_rate = 0;
-	struct msm_mi2s_pdata *mi2s_pdata;
-	int rc;
-	char boot_marker[40];
-=======
+
 	int rc = 0;
 	struct msm_dai_q6_group_mi2s_dai_data *dai_data =
 			dev_get_drvdata(dai->dev);
 	int i = 0;
->>>>>>> LA.UM.7.5.2.r1-02900-8x96.0
 
 	switch (dai->id) {
 	case AFE_PORT_ID_SECONDARY_MI2S_RX_1:

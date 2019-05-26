@@ -171,8 +171,7 @@ static int msm_qti_pp_put_eq_band_count_audio_mixer(
 	return 0;
 }
 
-<<<<<<< HEAD
-=======
+
 static int msm_qti_pp_put_dtmf_module_enable
 		(struct snd_kcontrol *kcontrol,
 				struct snd_ctl_elem_value *ucontrol)
@@ -212,7 +211,6 @@ done:
 	return ret;
 }
 
->>>>>>> LA.UM.7.5.2.r1-02900-8x96.0
 static int msm_qti_pp_get_eq_band_audio_mixer(struct snd_kcontrol *kcontrol,
 					    struct snd_ctl_elem_value *ucontrol)
 {
