@@ -383,16 +383,6 @@ static int msm_pcm_playback_prepare(struct snd_pcm_substream *substream)
 			prtd->audio_client = NULL;
 			return -ENOMEM;
 		}
-	} else if (q6core_get_avs_version() == Q6_SUBSYS_AVS2_7) {
-		ret = q6asm_open_write_v3(prtd->audio_client,
-				FORMAT_LINEAR_PCM, bits_per_sample);
-		if (ret < 0) {
-			pr_err("%s: q6asm_open_write_v3 failed (%d)\n",
-			__func__, ret);
-			q6asm_audio_client_free(prtd->audio_client);
-			prtd->audio_client = NULL;
-			return -ENOMEM;
-		}
 	} else {
 		ret = q6asm_open_write_v4(prtd->audio_client,
 			fmt_type, bits_per_sample);
