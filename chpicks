@@ -1,4 +1,6 @@
 
+MISSING: vibratorhw and sound soc stuff
+
 * cf55725 - update msm8996 xiaomi-common dtsi for 4.4 based on commits by DD3Boh (4 months ago) <Gabor Meszaros>
 * 68f4ccb - probably revert (4 months ago) <Gabor Meszaros>
 * 514a94a - Revert "ASoC: msm: qdsp6v2: Update dap driver to support Instance ID" (4 months ago) <Gabor Meszaros>
