@@ -1823,7 +1823,7 @@ static ssize_t qpnp_hap_vmax_mv_store(struct device *dev,
 	}
 
 	hap->vmax_mv = data;
-	rc = qpnp_hap_vmax_config(hap);
+	rc = qpnp_hap_vmax_config(hap, hap->vmax_mv, false);
 	if (rc)
 		pr_info("qpnp: error while writing vibration control register\n");
 
@@ -2284,9 +2284,10 @@ static void qpnp_timed_enable_worker(struct work_struct *work)
 	struct qpnp_hap *hap = container_of(work, struct qpnp_hap,
 					 td_work);
 	int value;
+	int time_ms;
 
 	spin_lock(&hap->td_lock);
-	value = hap->td_value;
+	time_ms = hap->td_time_ms;
 	spin_unlock(&hap->td_lock);
 
 	/* Vibrator already disabled */
@@ -2295,7 +2296,7 @@ static void qpnp_timed_enable_worker(struct work_struct *work)
 
 	flush_work(&hap->work);
 
-	bool state = !!time_ms;
+  bool state = !!time_ms;
 	ktime_t rem;
 	int rc;
 
@@ -2356,13 +2357,13 @@ static void qpnp_timed_enable_worker(struct work_struct *work)
 }
 
 /* enable interface from timed output class */
-static void qpnp_hap_td_enable(struct timed_output_dev *dev, int value)
+static void qpnp_hap_td_enable(struct timed_output_dev *dev, int time_ms)
 {
 	struct qpnp_hap *hap = container_of(dev, struct qpnp_hap,
 					 timed_dev);
 
 	spin_lock(&hap->td_lock);
-	hap->td_value = value;
+	hap->td_time_ms = time_ms;
 	spin_unlock(&hap->td_lock);
 
 	schedule_work(&hap->td_work);
