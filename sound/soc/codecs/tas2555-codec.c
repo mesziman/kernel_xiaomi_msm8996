@@ -210,7 +210,7 @@ static int tas2555_set_bias_level(struct snd_soc_codec *pCodec,
 	}
 
 //	pCodec->dapm.bias_level = eLevel;
-  snd_soc_codec_force_bias_level(eLevel)
+  snd_soc_codec_force_bias_level(pCodec, eLevel);
 	mutex_unlock(&pTAS2555->codec_lock);
 	return 0;
 }
