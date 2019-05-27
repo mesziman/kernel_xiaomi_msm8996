@@ -1820,7 +1820,7 @@ static ssize_t qpnp_hap_vmax_mv_store(struct device *dev,
 	}
 
 	hap->vmax_mv = data;
-	rc = qpnp_hap_vmax_config(hap);
+	rc = qpnp_hap_vmax_config(hap, hap->vmax_mv, false);
 	if (rc)
 		pr_info("qpnp: error while writing vibration control register\n");
 
