@@ -1,0 +1,170 @@
+
+* cf55725 - update msm8996 xiaomi-common dtsi for 4.4 based on commits by DD3Boh (4 months ago) <Gabor Meszaros>
+* 68f4ccb - probably revert (4 months ago) <Gabor Meszaros>
+* 514a94a - Revert "ASoC: msm: qdsp6v2: Update dap driver to support Instance ID" (4 months ago) <Gabor Meszaros>
+* c1fca97 - Revert "ASoC: msm: qdsp6v2: Update audio effects driver to support Instance ID" (4 months ago) <Gabor Meszaros>
+* 7faf81e - [WIP]arch: arm64: Update defconfigs based on msm-perf_defconfig (5 months ago) <JonasCardoso>
+* 671293e - Revert "q6asm: retry asm_open_read and asm_open_loopback when session id conflict" (5 months ago) <Henrique Pereira>
+* eae97a2e - ASoC: qdsp6v2: Fix build of q6afe (5 months ago) <Henrique Pereira>
+* 12bec0a8 - Revert "ASoC: msm: Upgrade ADM Driver to support 32 Channels" (5 months ago) <Henrique Pereira>
+* 9bea39c - Revert "ASoC: msm: Upgrade ASM Driver to support 32 Channels" (5 months ago) <Henrique Pereira>
+* 38c0ae0 - Revert "q6asm: retry asm open in case of session id conflict" (5 months ago) <Henrique Pereira>
+* c4fc0b1 - Revert "ASoC: msm: Upgrade AFE TDM Driver to support 32 Channels" (5 months ago) <Henrique Pereira>
+* 1c4b093 - qpnp-haptic: make its strength adjustable via VibratorHW (5 months ago) <XiNGRZ>
+* 12c0ca7 - Revert "qpnp-haptic: Add sysfs interface to control intensity" (5 months ago) <Henrique Pereira>
+* 65f97a0 - Revert "msm: qpnp-haptic: Process haptics asynchronously" (5 months ago) <Henrique Pereira>
+* e74deeb - Revert "ASoC: msm: Add mixer controls for module enabling" (5 months ago) <Henrique Pereira>
+* ec270cc - ASoC: qdsp6v2: Fix msm-pcm-routing-v2 building (5 months ago) <Henrique Pereira>
+* 0ea2a6d - ASoC: msm: qdsp6v2: Force V3 functions for MSM8996 (5 months ago) <Angelo G. Del Regno>
+* 77fd7c56 - Revert "ASoC: msm: qdsp6v2: Use globally q6asmv3 parameters for legacy SoC" (5 months ago) <Henrique Pereira>
+* 7ddb1a0 - arm: DT: MSM8996: Add efficiency parameter to each SoC CPU (5 months ago) <Angelo G. Del Regno>
+* f27f3c6 - msm: camera: ois: Fix no pinctrl and no gpio case (5 months ago) <Angelo G. Del Regno>
+* b75e7e9 - power: qcom: qpnp-smbcharger: Introduce property REAL_TYPE (5 months ago) <Angelo G. Del Regno>
+* 77da13f - power: qcom: qpnp-smbcharger: Introduce property SDP_CURRENT_MAX (5 months ago) <Angelo G. Del Regno>
+* 25afc90 - ASoC: codecs: Fix codecs errors related to dapm (5 months ago) <Henrique Pereira>
+* ecad243 - ASoC: codecs: Fix TAS2555-Codec compilation (5 months ago) <Henrique Pereira>
+* 7e318eb - Revert "msm: lmh_lite: Use mutex when accessing DPM register" (5 months ago) <Ram Chandrasekar>
+* 9be25fe - treewide: Fix type (5 months ago) <Henrique Pereira>
+* 0e33b65 - arm: DT: msm-pm(i)8994: Propagate qcom,lpg-lut-size property for PWM (5 months ago) <Angelo G. Del Regno>
+* 07de138 - arm: DT: PMI8994: Provide PMIC Revision ID to QPNP Haptics driver (5 months ago) <Angelo G. Del Regno>
+* 8a5d7c4 - treewide: Fix all errors related to pinctrl (5 months ago) <Henrique Pereira>
+* a3c6e26 - drivers: input: Adapt Synaptics drivers for kernel 4.4 (5 months ago) <Henrique Pereira>
+* f713f7c - drivers: input: Fix compiling error with atmel and FPC1020 drivers (5 months ago) <Henrique Pereira>
+* f7ed322 - treewide: Fix build of Elliptic Ultrasound driver (5 months ago) <Henrique Pereira>
+* ed3e353 - ARM: dts: Fix git conflict (5 months ago) <00day0>
+* b5ddbb2 - usb: dwc3-msm: Properly guard pm_stay_awake on devices with wakeup_source (5 months ago) <Luca Stefani>
+* 3479b67 - qcacld-2.0: Disable CONFIG_WLAN_THERMAL_SHUTDOWN (5 months ago) <Ivan Grinko>
+* 2b327cb - msm: camera: sensor: Fix memory leaks when sensor probe fails (5 months ago) <Sultanxda>
+* 5f8de87 - msm: camera: isp: Fix memory leaks in vfe probe (5 months ago) <Sultanxda>
+* a3c8430 - soc: qcom: glink: Fix memory leak in driver probe (5 months ago) <Sultanxda>
+* 7ad7f40 - ANDROID: sdcardfs: Add option to drop unused dentries (5 months ago) <Daniel Rosenberg>
+* ba58f3e - fs: sdfat: Add MODULE_ALIAS_FS for supported filesystems (5 months ago) <Paul Keith>
+* 39d6996 - fs: sdfat: Add config option to register sdFAT for VFAT (5 months ago) <Paul Keith>
+
+* 1520f8f - fs: sdfat: Add config option to register sdFAT for exFAT (5 months ago) <Paul Keith>
+* 5a758cc - ARM: dts: msm: Set default GPU freq to 133MHz on msm8996 and msm8996pro (5 months ago) <dianlujitao>
+* d87c319 - mm: swap_ratio: Only call trace_printk() in debug (5 months ago) <Fatih Akca>
+* 3c023dc - ASoC: tfa98xx: Clean up trace_printk() calls (5 months ago) <Fatih Akca>
+* 9afff44 - ARM64: configs: Enable support for sdFAT filesystem (5 months ago) <Bruno Martins>
+* 4bcffeb - input: fpc1020: Clean up interrupt handler (5 months ago) <Sultanxda>
+* acc31cb - input: fpc1020: Set fingerprint hal priority to max when screen is off (5 months ago) <Sultanxda>
+* bc4134d - input: fpc1020: Clean up PM routines and move them into dedicated worker (5 months ago) <Sultanxda>
+* f563929 - input: fingerprint: fpc1020: Allow filtering of key events (5 months ago) <Bruno Martins>
+* 6487652 - input: fingerprint: fpc1020: Honor proximity state (5 months ago) <Bruno Martins>
+* 2f4d098 - msm: qpnp-haptic: Process haptics asynchronously (5 months ago) <Sultanxda>
+* 4c7c2ff - qpnp-haptic: Dejank the haptics (5 months ago) <Steve Kondik>
+* 7de0b693 - qpnp-haptic: Add sysfs interface to control intensity (5 months ago) <Willi Ye>
+* ee62c71 - drivers: drv2604: Rename vtg_level_default to vtg_default (5 months ago) <Alberto97>
+* d16c58d - drivers: drv2604: Create sysfs interface for vibration intensity (5 months ago) <Sultan Qasim Khan>
+* 804b166 - ARM64: configs: Enable BFQ I/O scheduler (5 months ago) <Luca Stefani>
+* 7ad98f5 - block, bfq: fix build breakage (5 months ago) <Alexander Martinz>
+* 9b98762 - block, bfq: update to latest bfq-v8-v4.4 state (5 months ago) <Alexander Martinz>
+* adfebdd - block, bfq: add Early Queue Merge (EQM) to BFQ-v7r11 for 4.4.0 (5 months ago) <Mauro Andreolini>
+* 1a88e6f - block: introduce the BFQ-v7r11 I/O sched for 4.4.0 (5 months ago) <Paolo Valente>
+* 694487e - block: cgroups, kconfig, build bits for BFQ-v7r11-4.4.0 (5 months ago) <Paolo Valente>
+* 463307b - ARM64: configs: Enable F2FS filesystem support (5 months ago) <Bruno Martins>
+* 08c2b21 - ARM: dts: Setup pstore ramoops (5 months ago) <Luca Stefani>
+* 86aa907 - Revert "ARM: dts: msm: Fix for GPIO conflict issue on MSM8996 and APQ8096" (5 months ago) <Henrique Pereira>
+* efec406 - Revert "ARM: dts: msm: Fix quality issue in automotive platform" (5 months ago) <Henrique Pereira>
+* db67cd7 - ARM64: configs: capricorn: Enable reversed keys feature (5 months ago) <LuK1337>
+* d63d082 - input: atmel_mxt: Avoid swap button interface improper duplication (5 months ago) <Giuseppe Barillari>
+* f400f52 - input: cyttsp_button: Add reversed keys support and shared procfs node (5 months ago) <Giuseppe Barillari>
+* 1afb670 - ft5x46: Allow disabling ft8716 firmware updates (5 months ago) <blunden>
+* 2eff35e - input: ft5x46: Handle an additional framebuffer hint (5 months ago) <Bruno Martins>
+* f5513f4 - input: ft5x46: Create shared procfs nodes (5 months ago) <Bruno Martins>
+* fcf704e - synaptics_dsx_force: Report KEY_HOME for home button gesture (5 months ago) <LuK1337>
+* 271a6b2 - synaptics_dsx_force: Make REPORT_2D_PRESSURE optional (5 months ago) <LuK1337>
+* 5fdaa27 - input: atmel_mxt/synaptics_dsx: Implement swap button interface (5 months ago) <Louis Popi>
+* bc9831e - input: atmel_mxt/synaptics_dsx: Create shared procfs nodes (5 months ago) <Bruno Martins>
+* 224582a - atmel_mxt: Handle an additional framebuffer hint (5 months ago) <Bruno Martins>
+* f0c488ad - synaptics_dsx_force: Clean up fb_notifier callbacks (5 months ago) <LuK1337>
+* fd7d933 - synaptics_dsx: Rewrite fb_notifier callbacks (5 months ago) <Bruno Martins>
+* a9620cf - synaptics_dsx: Properly setup soft button irqs on resume (5 months ago) <Diogo Ferreira>
+* f11bc8f - input: synaptics: Report nanosecond timestamps to improve accuracy (5 months ago) <Steve Kondik>
+* 06955de6 - ARM: dts: Add synchronized RGB blink params (5 months ago) <Bruno Martins>
+* 2ce23f7 - pwm: qpnp-pwm: add api for synchronous enable of pwms (5 months ago) <Scott Mertz>
+* ee5a4df - leds: leds-qpnp: add synchronized rgb control (5 months ago) <Scott Mertz>
+* 3d1c185 - power: supply: Add battery info, jeita detection support (5 months ago) <Vamshi Krishna B V>
+* 1c275af - power: power_supply: Add property to limit pulses for HVDCP (5 months ago) <Anirudh Ghayal>
+* a103064 - power_supply: add support to control hvdcp3 detection (5 months ago) <Subbaraman Narayanamurthy>
+* c9db552 - power: qpnp-fg: Add snapshot of the FG driver (5 months ago) <Vamshi Krishna B V>
+* abfe01d - drivers: fix 32bit compilation for QPNP FG driver (5 months ago) <Tirupathi Reddy>
+/////HERE
+ d483d0c1a0 - power: qpnp-fg: Fix general coding style issues (5 months ago) <Kiran Gunda>
+* 1f3539c - power: qpnp-fg: Import capacity approximation changes from Xiaomi (5 months ago) <Luca Stefani>
+* 50b5ddd - power: qpnp-fg: Increase cutoff voltage (5 months ago) <Luca Stefani>
+* 13c8f30 - power: qpnp-fg: Reset on lockup (5 months ago) <Luca Stefani>
+* 19091ad - power: qpnp-fg: Use default DELTA_SOC without rounding the value (5 months ago) <Bruno Martins>
+* 873857d - qpnp-smbcharger: Bring in select fixes from Xiaomi (5 months ago) <LuK1337>
+* 25ecc04 - power: qpnp-smbcharger: init power supply type as USB (5 months ago) <dukwung.kim>
+* 2e3cb41 - scsi: ufs: extend the time out value of discard (5 months ago) <ocean_chen>
+* 8c0c898 - drivers: cnss: Add bdwlan param (5 months ago) <Luca Stefani>
+* 267ac5b - ARM: dts: msm8996-xiaomi: Set /vendor block device (5 months ago) <LuK1337>
+* 7fbc3dc - ARM: dts: msm8996-xiaomi: Correct system mount point and disable vendor (5 months ago) <Bruno Martins>
+* 9bcc601 - ARM64: configs: Select specific Xiaomi board variant (5 months ago) <Bruno Martins>
+* 765eb3b - ARM: dts: Build specific Xiaomi board variant (5 months ago) <Bruno Martins>
+* 58c3fa0 - ARM: dts: Import device tree source for Xiaomi MSM8996-based devices (5 months ago) <Bruno Martins>
+* b7b77a4 - ARM64: configs: Add initial defconfigs for Xiaomi MSM8996-based devices (5 months ago) <Bruno Martins>
+* adeb5b3 - ASoC: msm: Include Elliptic Ultrasound proximity support (5 months ago) <Luca Stefani>
+* 5e6cc34 - ASoC: msm: Import Xiaomi sound stack (5 months ago) <Luca Stefani>
+* 10bc0a4 - ASoC: wcd-mbhc: Add custom changes to MBHC detection (5 months ago) <Bruno Martins>
+* a83c451 - Prepare ASoC for Xiaomi sound stack (5 months ago) <Henrique Pereira>
+* f14269f - ASoC: codecs: Import new codecs and misc Xiaomi changes (5 months ago) <Luca Stefani>
+* 25913a2 - ASoC: core: Increase max name size (5 months ago) <Luca Stefani>
+* d0e311b - drivers: media: camera_v2: Include Xiaomi camera OIS support (5 months ago) <Bruno Martins>
+* f112015 - drivers: media: camera_v2: Import Xiaomi camera stack (5 months ago) <Luca Stefani>
+* ad3d437 - drivers: leds: Import Xiaomi changes (5 months ago) <Luca Stefani>
+* d564fea - Revert "leds: qpnp-wled: Configure WLED1_CTRL_SWITCHING_FREQUENCY selectively" (5 months ago) <Henrique Pereira>
+* 5e6568b - drivers: clk: Extend frequency clock table (5 months ago) <Luca Stefani>
+* 7ac6d2b - drivers: of: Use generic battery data if none is found (5 months ago) <Luca Stefani>
+* 34f5725 - drivers: sensors: Load firmware based on OF node (5 months ago) <Luca Stefani>
+* 43a0dc8 - drivers: soc: qcom: Add interface for reading CPU serial number (5 months ago) <Luca Stefani>
+* 23c87e1 - drivers: pinctrl: Nullify certain PIN groups (5 months ago) <Luca Stefani>
+* 17f61fa - drivers: regulator: Import Xiaomi changes (5 months ago) <Luca Stefani>
+* 0df5850 - drivers: media: rc: Import PWM based IR remote control driver (5 months ago) <Luca Stefani>
+* 6632863 - drivers: video: mdss: Add hooks used by touchscreen drivers (5 months ago) <Luca Stefani>
+* 85e5c6f - firmware: Import Xiaomi touchscreen firmware (5 months ago) <Luca Stefani>
+* b4d3334 - drivers: input: Import modified Atmel mXT touchscreen driver (5 months ago) <Luca Stefani>
+* 535b247 - drivers: input: Checkout atmel_mxt_ts from kernel 3.18 (5 months ago) <Henrique Pereira>
+* e4da7ba - drivers: input: Import modified Synaptics DSX touchscreen drivers (5 months ago) <Luca Stefani>
+* 1a69acb - input: synaptics_dsx: Correct error path for write_buf memory allocation (5 months ago) <Shantanu Jain>
+* 2cc743d - Revert "input: touchscreen: remove synaptics v2.6 touch driver" (5 months ago) <Henrique Pereira>
+* 3a6575f - input: synaptics: Secure touch clocks (5 months ago) <Nela Gurevich>
+* 989f17b - input: synaptics: Secure touch clocks (5 months ago) <keith fallows>
+* 3f5ef29 - Input: synaptics: check input, prevent sysfs races (5 months ago) <Andrew Chant>
+* edd4f48 - Revert "input: synaptics_dsx: add checks of user input data" (5 months ago) <Henrique Pereira>
+* f4482ae - Revert "Input: synaptics: check input, prevent sysfs races" (5 months ago) <Henrique Pereira>
+* 56b56ee - Revert "Revert "input: synaptics_dsx: remove array declaration in write function"" (5 months ago) <Henrique Pereira>
+* 9fd673e - drivers: input: Import FocalTech FT5x46 touchscreen driver (5 months ago) <Luca Stefani>
+* eb7442c - drivers: input: Import FingerTipS capacitive touchscreen driver (5 months ago) <Luca Stefani>
+* 1076754 - drivers: input: Import Cypress I2C button driver (5 months ago) <Luca Stefani>
+* 29df052 - drivers: soc: qcom: Import Capacitive touch driver (5 months ago) <LuK1337>
+
+* 77b223a - drivers: misc: Import USB Type-C drivers (5 months ago) <Luca Stefani>
+* cdb6b0c - drivers: misc: Import TouchSense haptics feedback driver (5 months ago) <Luca Stefani>
+* c87a330 - drivers: nfc: Import NFC PN548 driver (5 months ago) <Luca Stefani>
+* 92be73c - drivers: input: fingerprint: Import FPC1020 driver (5 months ago) <Luca Stefani>
+* d0f8210 - fs/exec: fix use after free in execve (5 months ago) <Andrea Arcangeli>
+* 33808468 - kernel: Fix potential refcount leak in su check (5 months ago) <Tom Marshall>
+* c372261 - kernel: Only expose su when daemon is running (5 months ago) <Tom Marshall>
+* 2efc0f2 - fs: sdfat: Fix compilation without debugging (5 months ago) <Paul Keith>
+* c96c6c6 - fs: Import sdFAT driver (5 months ago) <Bruno Martins>
+* 9ac468a - include: input: Fix unused function error (5 months ago) <Henrique Pereira>
+* 42a28c0 - kernel: Import bootinfo driver and setup changes to use it (5 months ago) <Luca Stefani>
+* c17f973 - staging: qcacld-2.0: Fix non-debug build and switch to it (5 months ago) <Michael Bestas>
+* ba1aa60 - staging: qcacld-2.0: Disable "maybe-uninitialized" warnings (5 months ago) <chrmhoffmann>
+* b516d24 - unifdef.c: use memcpy() instead of the dodgy strncpy(). (5 months ago) <Tony Finch>
+* 3dcb8de - Revert "scripts: gcc-wrapper: Use wrapper to check compiler warnings" (5 months ago) <Greg Hackmann>
+* 481ee658 - drivers: staging: Include qcacld-2.0 source (5 months ago) <LuK1337>
+* 13ea8b3 - Add 'drivers/staging/qcacld-2.0' from tag LA.UM.7.5.2.r1-00500-8x96.0 (5 months ago) <Henrique Pereira>
+* 8e08d67 - drivers platform: xiaomi: Update structure (5 months ago) <Davide Garberi>
+* b4cb31c - drivers: platform: Add Xiaomi MSM8996 platform support (5 months ago) <Bruno Martins>
+* 8bb8b21 - ASoC: msm: qdsp6v2: Use globally q6asmv3 parameters for legacy SoC (5 months ago) <Angelo G. Del Regno>
+* 753d249 - drivers: Remove references to PM_RUNTIME (5 months ago) <Davide Garberi>
+* 8085476 - ARM: dts: msm: Fix quality issue in automotive platform (5 months ago) <Viraja Kommaraju>
+* b21b1f4 - ARM: dts: msm: Fix for GPIO conflict issue on MSM8996 and APQ8096 (5 months ago) <Josh Kirsch>
+* a4f4b61 - ARM: dts: msm: Add support of speed-bin 3 for MSM8996v3 (5 months ago) <haihez>
+* d6f2f7b - arm: DT: MSM8996: Rename vfe_stream_clk for VFE0 and VFE1 (5 months ago) <Angelo G. Del Regno>
+* fe7358d - !!!TEMP HACK!!! regulator: qpnp,spm: Don't abort on bad constraints (5 months ago) <Angelo G. Del Regno>
+* 2e39b96 - fix SND_SOC_MSM_QDSP6V2_INTF dependency (5 months ago) <Alin Jerpelea>
+
