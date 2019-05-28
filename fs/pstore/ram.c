@@ -293,7 +293,7 @@ static int notrace ramoops_pstore_write_buf(enum pstore_type_id type,
 		persistent_ram_write(cxt->mprz, buf, size);
 		return 0;
 	}
-
+#if (0)
 	if (type != PSTORE_TYPE_DMESG)
 		return -EINVAL;
 
@@ -303,7 +303,7 @@ static int notrace ramoops_pstore_write_buf(enum pstore_type_id type,
 	if (reason != KMSG_DUMP_OOPS &&
 	    reason != KMSG_DUMP_PANIC)
 		return -EINVAL;
-
+#endif
 	/* Skip Oopes when configured to do so. */
 	if (reason == KMSG_DUMP_OOPS && !cxt->dump_oops)
 		return -EINVAL;
