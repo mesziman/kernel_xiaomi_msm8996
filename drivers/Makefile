@@ -187,4 +187,4 @@ obj-$(CONFIG_ESOC)              += esoc/
 obj-$(CONFIG_TEE)		+= tee/
 
 # Elliptic UltraSound proximity driver
-obj-y				+= elliptic/
+obj-$(CONFIG_XIAOMI_ELLIPTIC)				+= elliptic/

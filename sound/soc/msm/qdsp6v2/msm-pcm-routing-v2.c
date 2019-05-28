@@ -39,8 +39,9 @@
 #include <sound/hwdep.h>
 #include <sound/q6adm-v2.h>
 #include <sound/apr_audio-v2.h>
+#if CONFIG_XIAOMI_ELLIPTIC
 #include "msm-elliptic.h"
-
+#endif
 #include "msm-pcm-routing-v2.h"
 #include "msm-pcm-routing-devdep.h"
 #include "msm-qti-pp-config.h"
@@ -18426,8 +18427,9 @@ static int msm_routing_probe(struct snd_soc_platform *platform)
 	snd_soc_add_platform_controls(
 		platform, msm_routing_feature_support_mixer_controls,
 		ARRAY_SIZE(msm_routing_feature_support_mixer_controls));
-
+#if CONFIG_XIAOMI_ELLIPTIC
 	elliptic_add_platform_controls(platform);
+#endif
 	return 0;
 }
 

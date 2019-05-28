@@ -29,9 +29,9 @@
 #include <sound/adsp_err.h>
 #include <linux/qdsp6v2/apr_tal.h>
 #include <sound/q6core.h>
-
+#if CONFIG_XIAOMI_ELLIPTIC
 #include <sound/apr_elliptic.h>
-
+#endif
 #define WAKELOCK_TIMEOUT	5000
 enum {
 	AFE_COMMON_RX_CAL = 0,
@@ -118,9 +118,9 @@ struct afe_ctl {
 	struct afe_sp_th_vi_get_param_resp	th_vi_resp;
 	struct afe_sp_ex_vi_get_param_resp	ex_vi_resp;
 	struct afe_av_dev_drift_get_param_resp	av_dev_drift_resp;
-
+#if CONFIG_XIAOMI_ELLIPTIC
 	struct afe_ultrasound_calib_get_resp	ultrasound_calib_data;
-
+#endif
 	int vi_tx_port;
 	int vi_rx_port;
 	uint32_t afe_sample_rates[AFE_MAX_PORTS];
@@ -620,10 +620,14 @@ static int32_t afe_callback(struct apr_client_data *data, void *priv)
 		if (!ret) {
 			return ret;
 		}
-	} else if (data->opcode == ULTRASOUND_OPCODE) {
+	}
+#if CONFIG_XIAOMI_ELLIPTIC
+  else if (data->opcode == ULTRASOUND_OPCODE) {
 		if (data->payload != NULL)
 			elliptic_process_apr_payload(data->payload);
-	} else if (data->payload_size) {
+	}
+#endif
+  else if (data->payload_size) {
 		uint32_t *payload;
 		uint16_t port_id = 0;
 		payload = data->payload;

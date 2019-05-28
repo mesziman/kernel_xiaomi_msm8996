@@ -1,3 +1,3 @@
-obj-$(CONFIG_MACH_XIAOMI_MSM8996) += elliptic.o elliptic_sysfs.o elliptic_data_io.o
+obj-$(CONFIG_XIAOMI_ELLIPTIC) += elliptic.o elliptic_sysfs.o elliptic_data_io.o
 
 ccflags-y := -I$(src)

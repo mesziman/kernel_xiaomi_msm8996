@@ -12,8 +12,8 @@ obj-$(CONFIG_SND_SOC_QDSP6V2) += snd-soc-qdsp6v2.o msm-pcm-dtmf-v2.o \
 obj-$(CONFIG_SND_SOC_QDSP6V2_VM) += snd-soc-qdsp6v2.o msm-pcm-dtmf-v2.o \
 				 msm-dai-stub-v2.o
 
-obj-$(CONFIG_MACH_XIAOMI_MSM8996) += msm-elliptic.o apr_elliptic.o
-ccflags-$(CONFIG_MACH_XIAOMI_MSM8996) += -I$(srctree)/drivers/elliptic
+obj-$(CONFIG_XIAOMI_ELLIPTIC) += msm-elliptic.o apr_elliptic.o
+ccflags-$(CONFIG_XIAOMI_ELLIPTIC) += -I$(srctree)/drivers/elliptic
 
 obj-$(CONFIG_SND_HWDEP) += msm-pcm-routing-devdep.o
 obj-$(CONFIG_DOLBY_DAP) += msm-dolby-dap-config.o
