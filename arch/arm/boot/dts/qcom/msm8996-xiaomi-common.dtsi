@@ -1999,12 +1999,12 @@
     ramoops {
       compatible = "ramoops";
       memory-region = <&ramoops_mem>;
-      mem-size = <0x0 0x80000>;
-      mem-address = <0x0 0x92900000>;
-      record-size = <0x0 0x8000>;
-      console-size = <0x0 0x80000>;
-      ftrace-size = <0x0 0x20000>;
-      pmsg-size = <0x0 0x40000>;
+      mem-size = <0x80000>;
+      mem-address = <0x92900000>;
+      record-size = <0x8000>;
+      console-size = <0x80000>;
+      ftrace-size = <0x20000>;
+      pmsg-size = <0x40000>;
       ecc-size = <0x0>;
   };
 
