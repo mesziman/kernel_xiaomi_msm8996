@@ -183,6 +183,16 @@
 		qcom,fast-avg-setup = <0>;
 	};
 
+	chan@7c {
+		label = "xo_therm_buf";
+		reg = <0x7c>;
+		qcom,decimation = <0>;
+		qcom,pre-div-channel-scaling = <0>;
+		qcom,calibration-type = "ratiometric";
+		qcom,scale-function = <4>;
+		qcom,hw-settle-time = <2>;
+		qcom,fast-avg-setup = <0>;
+	};
 };
 
 &pm8994_adc_tm {
@@ -355,10 +365,6 @@
 &mdss_dsi1 {
 };
 
-&ibb_regulator {
-	qcom,qpnp-ibb-discharge-resistor = <32>;
-};
-
 &labibb {
 	status = "ok";
 	qcom,qpnp-labibb-mode = "lcd";
@@ -369,19 +375,13 @@
 	qcom,mdss-dsi-bl-min-level = <1>;
 	qcom,mdss-dsi-bl-max-level = <4095>;
 	qcom,panel-supply-entries = <&dsi_panel_pwr_supply>;
-	qcom,platform-reset-gpio = <&tlmm 8 0>;
-	qcom,platform-bklight-en-gpio = <&pm8994_gpios 14 0>;
 };
 
 &dsi_sharp_1080_cmd {
 	qcom,mdss-dsi-bl-pmic-control-type = "bl_ctrl_wled";
 	qcom,mdss-dsi-bl-min-level = <1>;
 	qcom,mdss-dsi-bl-max-level = <4095>;
-	qcom,cont-splash-enabled;
-  qcom,panel-supply-entries = <&dsi_panel_pwr_supply>;
-  qcom,platform-reset-gpio = <&tlmm 8 0>;
-  qcom,platform-bklight-en-gpio = <&pm8994_gpios 14 0>;
-  qcom,5v-boost-gpio = <&pmi8994_gpios 8 0>;
+	qcom,panel-supply-entries = <&dsi_panel_pwr_supply>;
 };
 
 &dsi_dual_nt35597_video {
@@ -389,7 +389,6 @@
 	qcom,mdss-dsi-bl-min-level = <1>;
 	qcom,mdss-dsi-bl-max-level = <4095>;
 	qcom,panel-supply-entries = <&dsi_panel_pwr_supply>;
-  	qcom,platform-reset-gpio = <&tlmm 8 0>;
 };
 
 &dsi_dual_nt35597_cmd {
@@ -399,7 +398,6 @@
 	qcom,panel-supply-entries = <&dsi_panel_pwr_supply>;
 	qcom,partial-update-enabled = "single_roi";
 	qcom,panel-roi-alignment = <720 128 720 64 720 64>;
-  	qcom,platform-reset-gpio = <&tlmm 8 0>;
 };
 
 &dsi_nt35950_4k_dsc_cmd {
@@ -549,16 +547,6 @@
 	qcom,cont-splash-enabled;
 	qcom,panel-supply-entries = <&dsi_panel_pwr_supply>;
 };
-&dsi_jdi_1080p_video {
-	qcom,mdss-dsi-bl-pmic-control-type = "bl_ctrl_wled";
-	qcom,mdss-dsi-bl-min-level = <1>;
-	qcom,mdss-dsi-bl-max-level = <4095>;
-	qcom,cont-splash-enabled;
-	qcom,panel-supply-entries = <&dsi_panel_pwr_supply_no_labibb>;
-	qcom,platform-reset-gpio = <&tlmm 8 0>;
-	qcom,platform-bklight-en-gpio = <&pm8994_gpios 14 0>;
-	qcom,5v-boost-gpio = <&pmi8994_gpios 8 0>;
-};
 
 / {
 	mtp_batterydata: qcom,battery-data {
@@ -628,7 +616,7 @@
 		qcom,vin-sel = <2>;		/* S4 1.8V */
 		qcom,src-sel = <0>;		/* Constant */
 		qcom,master-en = <1>;		/* Enable GPIO */
-		qcom,invert = <1>;
+		qcom,invert = <0>;
 		status = "okay";
 	};
 };
@@ -2074,12 +2062,8 @@
 	android {
 		fstab {
 			vendor {
-        compatible = "android,vendor";
 				dev = "/dev/block/platform/soc/624000.ufshc/by-name/cust";
-        type = "ext4";
-				mnt_flags = "ro,barrier=1,discard";
-				fsmgr_flags = "wait";
-				status = "ok";
+        fsmgr_flags = "wait";
 			};
 			system {
         compatible = "android,system";
