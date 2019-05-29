@@ -1120,7 +1120,6 @@
 	qcom,thermal-mitigation = <2500 2000 1100 1000>;
 	qcom,fastchg-current-comp = <1200>;
 	qcom,float-voltage-comp = <16>;
-	dpdm-supply = <&qusb_phy0>;
 };
 
 &pmi8994_fg {
