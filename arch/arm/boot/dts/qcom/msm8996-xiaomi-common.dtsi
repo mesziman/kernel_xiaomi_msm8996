@@ -2059,20 +2059,31 @@
 
 &firmware {
 	android {
+		compatible = "android,firmware";
+		/delete-node/ vbmeta;
 		fstab {
-			vendor {
+			compatible = "android,fstab";
+			android_vendor: vendor  {
+				compatible = "android,vendor";
 				dev = "/dev/block/platform/soc/624000.ufshc/by-name/cust";
-        fsmgr_flags = "wait";
+				type = "ext4";
+				mnt_flags = "ro,barrier=1,discard";
+				fsmgr_flags = "wait";
+				status = "ok";
 			};
 			system {
-        compatible = "android,system";
+        			compatible = "android,system";
 				dev = "/dev/block/platform/soc/624000.ufshc/by-name/system";
-        type = "ext4";
-        mnt_flags = "ro,barrier=1,discard";
-        fsmgr_flags = "wait";
-        status = "ok";
+				type = "ext4";
+				mnt_flags = "ro,barrier=1,discard";
+				fsmgr_flags = "wait";
+				status = "ok";
 			};
 		};
 	};
+};
+
+&android_vendor {
+	fsmgr_flags = "wait";
 };
 // msm8996.dtsi end
