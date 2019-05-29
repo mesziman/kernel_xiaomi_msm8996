@@ -6,8 +6,8 @@ CCACHEDIR=../CCACHE/capricorn
 TOOLCHAINDIR=/pipeline/build/root/toolchain/aarch64-linux-android-4.9
 TOOLCHAIN32=/pipeline/build/root/toolchain/arm-linux-androideabi-4.9
 DATE=$(date +"%Y%m%d-%H%M")
-KERNEL_NAME="4.4-"
-DEVICE="-capricorn-LA.UM.7.5.2.r1-02900-8x96.0-rebase"
+KERNEL_NAME="4.4"
+DEVICE="-cap-perf"
 VER="-0.1-"
 TYPE="-HMP"
 FINAL_ZIP="$KERNEL_NAME""$DEVICE""$TYPE""$VER""$DATE".zip
@@ -31,7 +31,7 @@ export USE_CCACHE=1
 export CCACHE_DIR=$CCACHEDIR/.ccache
 
 make clean && make mrproper
-make -C $KERNEL_DIR O=out capricorn_defconfig
+make -C $KERNEL_DIR O=out cap-perf_defconfig
 make O=out -C $KERNEL_DIR -j$( nproc --all ) ARCH=arm64 CROSS_COMPILE=aarch64-linux-android- CROSS_COMPILE_ARM32=arm-linux-androideabi-
 
 {
