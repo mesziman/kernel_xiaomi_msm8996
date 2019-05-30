@@ -1862,7 +1862,7 @@
 			reg = <0x0 0x89c00000 0x0 0x6200000>;
 		};
 
-		ocimem_log: ocimem_log@0xb4000000 {
+		ocimem_log: ocimem_log@b4000000 {
 			reg = <0 0xB4000000 0 0x100000>;
 			label = "ocimem_log";
 		};
@@ -1929,7 +1929,7 @@
 		pinctrl-1 = <&i2c_9_sleep>;
 	};
 
-	sn_fuse: snfuse@0x74138 {
+	sn_fuse: snfuse@74138 {
 		compatible = "qcom,sn-fuse";
 		reg = <0x74138 0x4>;
 		reg-names = "sn-base";
